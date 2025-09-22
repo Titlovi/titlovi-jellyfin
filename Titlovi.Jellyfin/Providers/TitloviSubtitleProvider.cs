@@ -1,4 +1,5 @@
 using System.Globalization;
+using Jellyfin.Data.Entities.Libraries;
 using MediaBrowser.Controller.Providers;
 using MediaBrowser.Controller.Subtitles;
 using MediaBrowser.Model.Providers;
@@ -43,9 +44,15 @@ public class TitloviSubtitlesProvider : ISubtitleProvider
     /// <inheritdoc />
     public async Task<IEnumerable<RemoteSubtitleInfo>> Search(SubtitleSearchRequest request, CancellationToken cancellationToken)
     {
+        var imdbId = request.ProviderIds?.GetValueOrDefault("Imdb");
+        if (string.IsNullOrEmpty(imdbId))
+        {
+            return [];
+        }
+
         var response = await titloviManager.SearchAsync(
             new LoginInfo() { Username = TitloviJellyfin.Instance?.Configuration.Username!, Password = TitloviJellyfin.Instance?.Configuration.Password! },
-            new SubtitleSearch() { Query = request.Name }
+            new SubtitleSearch() { ImdbId = imdbId }
         ).ConfigureAwait(false);
 
         return response.Results.Select(result =>
@@ -56,7 +63,9 @@ public class TitloviSubtitlesProvider : ISubtitleProvider
                 ProviderName = Name,
                 AiTranslated = false,
                 Name = result.Title,
+                CommunityRating = result.Rating,
+                DownloadCount = result.DownloadCount,
             };
-        }).ToList();
+        }).ToList().OrderBy(result => result.DownloadCount).Reverse();
     }
 }

@@ -1,6 +1,11 @@
+using System.Globalization;
 using MediaBrowser.Controller.Providers;
 using MediaBrowser.Controller.Subtitles;
 using MediaBrowser.Model.Providers;
+using Microsoft.Extensions.Logging;
+using Titlovi.Jellyfin.Interfaces;
+using Titlovi.Jellyfin.Models;
+using Titlovi.Jellyfin.Models.Subtitle;
 
 namespace Titlovi.Jellyfin.Providers;
 
@@ -10,21 +15,48 @@ namespace Titlovi.Jellyfin.Providers;
 /// </summary>
 public class TitloviSubtitlesProvider : ISubtitleProvider
 {
-    /// <inheritdoc />
-    public string Name => throw new NotImplementedException();
+    private readonly ILogger<TitloviSubtitlesProvider> logger;
+    private readonly ITitloviManager titloviManager;
 
-    /// <inheritdoc />
-    public IEnumerable<VideoContentType> SupportedMediaTypes => throw new NotImplementedException();
-
-    /// <inheritdoc />
-    public Task<SubtitleResponse> GetSubtitles(string id, CancellationToken cancellationToken)
+    public TitloviSubtitlesProvider(ILogger<TitloviSubtitlesProvider> logger, ITitloviManager titloviManager)
     {
-        throw new NotImplementedException();
+        this.logger = logger;
+        this.titloviManager = titloviManager;
     }
 
     /// <inheritdoc />
-    public Task<IEnumerable<RemoteSubtitleInfo>> Search(SubtitleSearchRequest request, CancellationToken cancellationToken)
+    public string Name => "Titlovi.com";
+
+    /// <inheritdoc />
+    public IEnumerable<VideoContentType> SupportedMediaTypes => new[]
     {
-        throw new NotImplementedException();
+      VideoContentType.Episode,
+      VideoContentType.Movie
+    };
+
+    /// <inheritdoc />
+    public async Task<SubtitleResponse> GetSubtitles(string id, CancellationToken cancellationToken)
+    {
+        return new SubtitleResponse();
+    }
+
+    /// <inheritdoc />
+    public async Task<IEnumerable<RemoteSubtitleInfo>> Search(SubtitleSearchRequest request, CancellationToken cancellationToken)
+    {
+        var response = await titloviManager.SearchAsync(
+            new LoginInfo() { Username = TitloviJellyfin.Instance?.Configuration.Username!, Password = TitloviJellyfin.Instance?.Configuration.Password! },
+            new SubtitleSearch() { Query = request.Name }
+        ).ConfigureAwait(false);
+
+        return response.Results.Select(result =>
+        {
+            return new RemoteSubtitleInfo()
+            {
+                Id = Convert.ToString(result.Id, CultureInfo.InvariantCulture),
+                ProviderName = Name,
+                AiTranslated = false,
+                Name = result.Title,
+            };
+        }).ToList();
     }
 }

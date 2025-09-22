@@ -1,0 +1,54 @@
+type: http_request
+model: http_request
+id: rq_hUKWgKGQsQ
+createdAt: 2025-09-22T20:26:00.875735803
+updatedAt: 2025-09-22T22:23:17.388422839
+workspaceId: wk_ZvrMvhviaR
+folderId: null
+authentication: {}
+authenticationType: null
+body: {}
+bodyType: null
+description: ''
+headers:
+- enabled: true
+  name: username
+  value: ''
+  id: Z8UUCFb3BT
+- enabled: true
+  name: password
+  value: ''
+  id: v2SHYKTWUp
+- enabled: true
+  name: ''
+  value: ''
+  id: YtpZwwQ29e
+method: GET
+name: search
+sortPriority: -1758572593519.0
+url: https://kodi.titlovi.com/api/subtitles/search
+urlParameters:
+- enabled: true
+  name: query
+  value: ''
+  id: jHxtfGQTQh
+- enabled: false
+  name: imdbid
+  value: ''
+  id: HGNuY2hxDP
+- enabled: false
+  name: season
+  value: ''
+  id: 3ZyEQ4GTSn
+- enabled: false
+  name: episode
+  value: ''
+  id: bM299ZkqEe
+- enabled: false
+  name: pg
+  value: ''
+  id: 5BChBtpqyT
+- enabled: true
+  name: ''
+  value: ''
+  id: VCsd58VFRG

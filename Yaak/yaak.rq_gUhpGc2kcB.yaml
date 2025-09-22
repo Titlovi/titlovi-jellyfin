@@ -1,0 +1,27 @@
+type: http_request
+model: http_request
+id: rq_gUhpGc2kcB
+createdAt: 2025-09-22T20:24:53.560145232
+updatedAt: 2025-09-22T20:25:49.655195910
+workspaceId: wk_ZvrMvhviaR
+folderId: null
+authentication: {}
+authenticationType: null
+body:
+  text: |-
+    {
+      "username": "",
+      "password": ""
+    }
+bodyType: application/json
+description: ''
+headers:
+- enabled: true
+  name: Content-Type
+  value: application/json
+  id: ZghXzFFIWS
+method: POST
+name: validatelogin
+sortPriority: -1758572593519.0
+url: https://kodi.titlovi.com/api/subtitles/validatelogin
+urlParameters: []

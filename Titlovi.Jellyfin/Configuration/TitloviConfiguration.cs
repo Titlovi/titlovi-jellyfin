@@ -2,6 +2,9 @@ using MediaBrowser.Model.Plugins;
 
 namespace Titlovi.Jellyfin.Configuration;
 
+/// <summary>
+/// Languages: "Bosanski", "Cirilica", "English", "Hrvatski", "Makedonski", "Slovenski", "Srpski".
+/// </summary>
 public class TitloviConfiguration : BasePluginConfiguration
 {
     /// <summary>

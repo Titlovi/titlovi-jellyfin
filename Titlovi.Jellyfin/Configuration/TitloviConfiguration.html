@@ -50,7 +50,7 @@
           ApiClient.getPluginConfiguration(TitloviConfig.pluginUniqueId).then(function (config) {
             config.Username = document.querySelector('#titlovi-username').value;
             config.Password = document.querySelector('#titlovi-password').value;
-            ApiClient.updatePluginConfiguration(TemplateConfig.pluginUniqueId, config).then(function (result) {
+            ApiClient.updatePluginConfiguration(TitloviConfig.pluginUniqueId, config).then(function (result) {
               Dashboard.processPluginConfigurationUpdateResult(result);
             });
           });

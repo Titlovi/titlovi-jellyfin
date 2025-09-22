@@ -1,0 +1,30 @@
+type: http_request
+model: http_request
+id: rq_UhYWpYYdh2
+createdAt: 2025-09-22T20:23:13.519590780
+updatedAt: 2025-09-22T20:24:49.391480901
+workspaceId: wk_ZvrMvhviaR
+folderId: null
+authentication: {}
+authenticationType: null
+body: {}
+bodyType: null
+description: ''
+headers: []
+method: POST
+name: gettoken
+sortPriority: -1758572593519.0
+url: https://kodi.titlovi.com/api/subtitles/gettoken
+urlParameters:
+- enabled: true
+  name: username
+  value: ''
+  id: SF4CEmDwMF
+- enabled: true
+  name: password
+  value: ''
+  id: PhvfgqvR9m
+- enabled: true
+  name: ''
+  value: ''
+  id: rNwsJtuvnu

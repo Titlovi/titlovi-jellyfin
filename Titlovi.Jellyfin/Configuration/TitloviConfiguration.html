@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="utf-8">
-  <title>Template</title>
+  <title>Titlovi.com</title>
 </head>
 
 <body>
@@ -11,9 +11,52 @@
     data-require="emby-input,emby-button,emby-select,emby-checkbox">
     <div data-role="content">
       <div class="content-primary">
+        <form id="TitloviConfigForm">
+          <h3>Account</h3>
+          <div class="inputContainer">
+            <label class="inputLabel inputLabelUnfocused" for="titlovi-username">Username</label>
+            <input id="titlovi-username" name="titlovi-username" type="text" is="emby-input" />
+            <div class="fieldDescription">Username of your account.</div>
+          </div>
+          <div class="inputContainer">
+            <label class="inputLabel inputLabelUnfocused" for="titlovi-password">Password</label>
+            <input id="titlovi-password" name="titlovi-password" type="password" is="emby-input" />
+            <div class="fieldDescription">Password of your account.</div>
+          </div>
+          <div>
+            <button is="emby-button" type="submit" class="raised button-submit block emby-button">
+              <span>Save</span>
+            </button>
+          </div>
+        </form>
       </div>
     </div>
     <script type="text/javascript">
+      var TitloviConfig = {
+        pluginUniqueId: "6e25df50-638e-4109-a50b-03c14fc93fdd"
+      };
+      document.querySelector('#TitloviConfigPage')
+        .addEventListener('pageshow', function () {
+          Dashboard.showLoadingMsg();
+          ApiClient.getPluginConfiguration(TitloviConfig.pluginUniqueId).then(function (config) {
+            document.querySelector('#titlovi-username').value = config.Username;
+            document.querySelector('#titlovi-password').value = config.Password;
+            Dashboard.hideLoadingMsg();
+          });
+        });
+      document.querySelector('#TitloviConfigForm')
+        .addEventListener('submit', function (e) {
+          Dashboard.showLoadingMsg();
+          ApiClient.getPluginConfiguration(TitloviConfig.pluginUniqueId).then(function (config) {
+            config.Username = document.querySelector('#titlovi-username').value;
+            config.Password = document.querySelector('#titlovi-password').value;
+            ApiClient.updatePluginConfiguration(TemplateConfig.pluginUniqueId, config).then(function (result) {
+              Dashboard.processPluginConfigurationUpdateResult(result);
+            });
+          });
+          e.preventDefault();
+          return false;
+        });
     </script>
   </div>
 </body>

@@ -65,6 +65,7 @@ public class TitloviSubtitlesProvider : ISubtitleProvider
                 Name = result.Title,
                 CommunityRating = result.Rating,
                 DownloadCount = result.DownloadCount,
+                Format = "srt",
             };
         }).ToList().OrderBy(result => result.DownloadCount).Reverse();
     }

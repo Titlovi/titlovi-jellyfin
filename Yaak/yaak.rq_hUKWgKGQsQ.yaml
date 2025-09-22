@@ -2,7 +2,7 @@ type: http_request
 model: http_request
 id: rq_hUKWgKGQsQ
 createdAt: 2025-09-22T20:26:00.875735803
-updatedAt: 2025-09-22T22:44:32.922444460
+updatedAt: 2025-09-22T23:21:47.615061751
 workspaceId: wk_ZvrMvhviaR
 folderId: fl_frRQqZC5sB
 authentication: {}
@@ -11,24 +11,24 @@ body: {}
 bodyType: null
 description: ''
 headers:
-- enabled: true
+- enabled: false
   name: username
   value: ''
   id: Z8UUCFb3BT
-- enabled: true
+- enabled: false
   name: password
   value: ''
   id: v2SHYKTWUp
 - enabled: true
   name: ''
   value: ''
-  id: YtpZwwQ29e
+  id: erepVsITjg
 method: GET
 name: search
 sortPriority: 2000.0
 url: https://kodi.titlovi.com/api/subtitles/search
 urlParameters:
-- enabled: true
+- enabled: false
   name: query
   value: ''
   id: jHxtfGQTQh
@@ -48,7 +48,19 @@ urlParameters:
   name: pg
   value: ''
   id: 5BChBtpqyT
+- enabled: false
+  name: token
+  value: ''
+  id: 9ktziywJ4q
+- enabled: false
+  name: userid
+  value: ''
+  id: zzCwt2urky
+- enabled: false
+  name: lang
+  value: ''
+  id: Zpt4wIcIw8
 - enabled: true
   name: ''
   value: ''
-  id: VCsd58VFRG
+  id: buMRTCdBqz

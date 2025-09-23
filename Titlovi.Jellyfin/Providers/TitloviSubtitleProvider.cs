@@ -106,6 +106,13 @@ public class TitloviSubtitleProvider : ISubtitleProvider
             return new List<RemoteSubtitleInfo>();
         }
 
+        // TODO :: currently only the first page of the subtitles
+        // that are returned is scanned, that is an issue. Looping
+        // through pages and getting all the subtitles is going to be needed.
+
+        // TODO :: the results should also take into considaration the media
+        // information from `GetMediaStreamsAsync`. (such as the `encoder`, `resolution`...)
+
         return response.Results.Select(result => new RemoteSubtitleInfo()
         {
             Id = $"{result.Id}-{result.Type}-{result.Language}",
@@ -117,9 +124,9 @@ public class TitloviSubtitleProvider : ISubtitleProvider
             DateCreated = result.Date,
             Format = "srt",
             Author = string.Empty,
-            Comment = string.Empty,
+            Comment = result.Release,
             ThreeLetterISOLanguageName = result.Language.FromProviderLanguage()
-        }).OrderByDescending(result => result.DownloadCount);
+        }).OrderByDescending(result => result.DownloadCount).ThenByDescending(result => result.CommunityRating);
     }
 
     private async Task<MediaInfo> GetMediaStreamsAsync(string mediaPath, CancellationToken cancellationToken)

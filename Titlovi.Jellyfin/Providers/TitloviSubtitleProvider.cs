@@ -23,14 +23,12 @@ public class TitloviSubtitleProvider : ISubtitleProvider
     private readonly ILogger<TitloviSubtitleProvider> logger;
     private readonly ITitloviManager titloviManager;
     private readonly IMediaEncoder mediaEncoder;
-    private readonly HttpClient httpClient;
 
-    public TitloviSubtitleProvider(ILogger<TitloviSubtitleProvider> logger, ITitloviManager titloviManager, IMediaEncoder mediaEncoder, IHttpClientFactory httpClientFactory)
+    public TitloviSubtitleProvider(ILogger<TitloviSubtitleProvider> logger, ITitloviManager titloviManager, IMediaEncoder mediaEncoder)
     {
         this.logger = logger;
         this.titloviManager = titloviManager;
         this.mediaEncoder = mediaEncoder;
-        this.httpClient = httpClientFactory.CreateClient("HttpTitloviClient");
     }
 
     /// <inheritdoc />
@@ -52,10 +50,15 @@ public class TitloviSubtitleProvider : ISubtitleProvider
             throw new FormatException($"Invalid subtitle id format: {id}");
         }
 
-        var response = await httpClient.GetAsync($"download/?mediaid={idParts[0]}&type={idParts[1]}", cancellationToken).ConfigureAwait(false);
-        if (response.StatusCode != HttpStatusCode.OK)
+        var responseBytes = await titloviManager.DownloadAsync(new SubtitleDownload()
         {
-            throw new HttpRequestException($"Failed to download subtitle with id: {id}");
+            MediaId = Convert.ToInt32(idParts[0], CultureInfo.InvariantCulture),
+            Type = Convert.ToInt32(idParts[1], CultureInfo.InvariantCulture)
+        }).ConfigureAwait(false);
+
+        if (responseBytes is null)
+        {
+            throw new HttpRequestException($"Failed to download subtitle from id: {id}");
         }
 
         return new SubtitleResponse()
@@ -64,7 +67,7 @@ public class TitloviSubtitleProvider : ISubtitleProvider
             IsForced = false,
             IsHearingImpaired = false,
             Language = idParts[2].FromProviderLanguage(),
-            Stream = new MemoryStream(await response.Content.ReadAsByteArrayAsync(cancellationToken).ConfigureAwait(false)),
+            Stream = new MemoryStream(responseBytes),
         };
     }
 

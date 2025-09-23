@@ -24,4 +24,10 @@ public interface ITitloviManager
     /// the provided search parameters.
     /// </summary>
     Task<SubtitleResults?> SearchAsync(SubtitleSearch subtitleSearch);
+
+    /// <summary>
+    /// Downlodas the subtitle file from the
+    /// titlovi api based on the provided download information
+    /// </summary>
+    Task<byte[]?> DownloadAsync(SubtitleDownload subtitleDownload);
 }

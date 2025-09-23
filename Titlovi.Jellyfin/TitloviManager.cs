@@ -15,12 +15,15 @@ namespace Titlovi.Jellyfin;
 public class TitloviManager : ITitloviManager
 {
     private readonly ILogger<TitloviManager> logger;
-    private readonly HttpClient httpClient;
+    private readonly HttpClient kodiHttpClient;
+    private readonly HttpClient titloviHttpClient;
 
     public TitloviManager(ILogger<TitloviManager> logger, IHttpClientFactory httpClientFactory)
     {
         this.logger = logger;
-        this.httpClient = httpClientFactory.CreateClient("HttpKodiClient");
+
+        this.kodiHttpClient = httpClientFactory.CreateClient("HttpKodiClient");
+        this.titloviHttpClient = httpClientFactory.CreateClient("HttpTitloviClient");
     }
 
     public async Task<TokenInfo?> GetTokenAsync()
@@ -33,7 +36,7 @@ public class TitloviManager : ITitloviManager
             return tokenInfo;
         }
 
-        var response = await httpClient.PostAsync("gettoken?" + configuration.LoginInfo.ToQueryString(), null).ConfigureAwait(false);
+        var response = await kodiHttpClient.PostAsync("gettoken?" + configuration.LoginInfo.ToQueryString(), null).ConfigureAwait(false);
         if (response.StatusCode is not HttpStatusCode.OK)
         {
             logger.LogWarning("Failed to authenticate with Titlovi.com");
@@ -49,7 +52,7 @@ public class TitloviManager : ITitloviManager
     public async Task<bool> ValidateLoginAsync()
     {
         var body = new StringContent(JsonSerializer.Serialize(TitloviJellyfin.Instance!.Configuration.LoginInfo), Encoding.UTF8, "application/json");
-        var response = await httpClient.PostAsync("validatelogin", body).ConfigureAwait(false);
+        var response = await kodiHttpClient.PostAsync("validatelogin", body).ConfigureAwait(false);
 
         if (response.StatusCode is not HttpStatusCode.OK)
         {
@@ -71,7 +74,7 @@ public class TitloviManager : ITitloviManager
         subtitleSearch.Token = tokenInfo.Token.ToString();
         subtitleSearch.UserId = tokenInfo.UserId;
 
-        var response = await httpClient.GetAsync("search?" + subtitleSearch.ToQueryString()).ConfigureAwait(false);
+        var response = await kodiHttpClient.GetAsync("search?" + subtitleSearch.ToQueryString()).ConfigureAwait(false);
         if (response.StatusCode is not HttpStatusCode.OK)
         {
             logger.LogWarning("Failed to validate credentials with Titlovi.com");
@@ -79,5 +82,16 @@ public class TitloviManager : ITitloviManager
         }
 
         return JsonSerializer.Deserialize<SubtitleResults>(await response.Content.ReadAsStringAsync().ConfigureAwait(false));
+    }
+
+    public async Task<byte[]?> DownloadAsync(SubtitleDownload subtitleDownload)
+    {
+        var response = await titloviHttpClient.GetAsync($"download?" + subtitleDownload.ToQueryString()).ConfigureAwait(false);
+        if (response.StatusCode != HttpStatusCode.OK)
+        {
+            return null;
+        }
+
+        return await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
     }
 }

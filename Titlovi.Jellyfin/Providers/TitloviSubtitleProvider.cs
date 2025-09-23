@@ -1,5 +1,4 @@
 using System.Globalization;
-using System.Net;
 using MediaBrowser.Controller.MediaEncoding;
 using MediaBrowser.Controller.Providers;
 using MediaBrowser.Controller.Subtitles;
@@ -61,13 +60,21 @@ public class TitloviSubtitleProvider : ISubtitleProvider
             throw new HttpRequestException($"Failed to download subtitle from id: {id}");
         }
 
+        var subtitles = titloviManager.ExtractSubtitles(responseBytes);
+        if (subtitles.Count == 0)
+        {
+            throw new InvalidDataException("Data received didn't contain any subtitles!");
+        }
+
+        logger.LogInformation("Number of subtitles detected in stream: {Count}", subtitles.Count);
+
         return new SubtitleResponse()
         {
             Format = "srt",
             IsForced = false,
             IsHearingImpaired = false,
             Language = idParts[2].FromProviderLanguage(),
-            Stream = new MemoryStream(responseBytes),
+            Stream = new MemoryStream(subtitles[0]),
         };
     }
 

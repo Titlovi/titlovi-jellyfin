@@ -27,7 +27,14 @@ public interface ITitloviManager
 
     /// <summary>
     /// Downlodas the subtitle file from the
-    /// titlovi api based on the provided download information
+    /// titlovi api based on the provided download information.
     /// </summary>
     Task<byte[]?> DownloadAsync(SubtitleDownload subtitleDownload);
+
+    /// <summary>
+    /// Extracts the subtitles (.srt files) from the
+    /// provided stream. This is done cause some of the 
+    /// subtitles are provided in a zip file.
+    /// </summary>
+    List<byte[]> ExtractSubtitles(byte[] buffer);
 }

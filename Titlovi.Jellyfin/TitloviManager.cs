@@ -1,3 +1,4 @@
+using System.IO.Compression;
 using System.Net;
 using System.Text;
 using System.Text.Json;
@@ -93,5 +94,32 @@ public class TitloviManager : ITitloviManager
         }
 
         return await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
+    }
+
+    public List<byte[]> ExtractSubtitles(byte[] buffer)
+    {
+        try
+        {
+            using (var memoryStream = new MemoryStream(buffer))
+            using (var archive = new ZipArchive(memoryStream, ZipArchiveMode.Read))
+            {
+                return archive.Entries
+                    .Where(entry => entry.Name.EndsWith(".srt", StringComparison.OrdinalIgnoreCase))
+                    .Select(entry =>
+                    {
+                        using (var entryStream = entry.Open())
+                        using (var extractedStream = new MemoryStream())
+                        {
+                            entryStream.CopyTo(extractedStream);
+                            return extractedStream.ToArray();
+                        }
+                    })
+                    .ToList();
+            }
+        }
+        catch (Exception)
+        {
+            return new List<byte[]> { buffer };
+        }
     }
 }

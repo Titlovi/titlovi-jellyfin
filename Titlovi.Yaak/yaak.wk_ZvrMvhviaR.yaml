@@ -2,12 +2,12 @@ type: workspace
 model: workspace
 id: wk_ZvrMvhviaR
 createdAt: 2025-09-22T20:21:56.092391067
-updatedAt: 2025-09-22T20:22:01.792867398
+updatedAt: 2025-09-23T17:56:36.885497843
 authentication: {}
 authenticationType: null
 description: ''
 headers: []
-name: Titlovi.Jellyfin
+name: Titlovi.Yaak
 encryptionKeyChallenge: eUE0azNuQwGrGSJPP+L03rxf65w9aAFsKJbX5KxYMaD3rBebanXMezxwiwCwXAZJ4ImRThBgV9Q1cVX5Vgx0lDVoPKDvb1cFOAd+qgSbYPJU+jB7S8DyM4/5XNlU5Zt3o6A=
 settingValidateCertificates: true
 settingFollowRedirects: true

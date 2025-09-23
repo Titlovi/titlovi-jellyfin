@@ -1,2 +1,2 @@
 # jellyfin-titlovi
-jellyfin plugin for fetching subtitles from titlovi.com
+get access to subtitles from titlovi.com directly in jellyfin.

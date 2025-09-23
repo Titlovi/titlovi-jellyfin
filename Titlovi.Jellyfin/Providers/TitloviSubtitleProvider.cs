@@ -1,3 +1,4 @@
+using System.Collections.ObjectModel;
 using System.Globalization;
 using MediaBrowser.Controller.MediaEncoding;
 using MediaBrowser.Controller.Providers;
@@ -89,7 +90,7 @@ public class TitloviSubtitleProvider : ISubtitleProvider
             return new List<RemoteSubtitleInfo>();
         }
 
-        var response = await titloviManager.SearchAsync(new SubtitleSearch()
+        var searchQuery = new SubtitleSearch()
         {
             UserId = tokenInfo.UserId,
             Token = tokenInfo.Token.ToString(),
@@ -100,21 +101,36 @@ public class TitloviSubtitleProvider : ISubtitleProvider
             IgnoreLangAndEpisode = false,
             Season = request.ParentIndexNumber,
             Episode = request.IndexNumber
-        }).ConfigureAwait(false);
+        };
 
+        var response = await titloviManager.SearchAsync(searchQuery).ConfigureAwait(false);
         if (response is null)
         {
             return new List<RemoteSubtitleInfo>();
         }
 
-        // TODO :: currently only the first page of the subtitles
-        // that are returned is scanned, that is an issue. Looping
-        // through pages and getting all the subtitles is going to be needed.
+        var subtitles = new Collection<Subtitle>(response.Results);
+        if (response.PagesAvailable > 1)
+        {
+            for (int i = response.CurrentPage + 1; i <= response.PagesAvailable; i++)
+            {
+                searchQuery.Page = i;
+
+                var currentPage = await titloviManager.SearchAsync(searchQuery).ConfigureAwait(false);
+                if (currentPage is not null)
+                {
+                    foreach (var result in currentPage.Results)
+                    {
+                        subtitles.Add(result);
+                    }
+                }
+            }
+        }
 
         // TODO :: the results should also take into considaration the media
         // information from `GetMediaStreamsAsync`. (such as the `encoder`, `resolution`...)
 
-        return response.Results.Select(result => new RemoteSubtitleInfo()
+        return subtitles.Select(result => new RemoteSubtitleInfo()
         {
             Id = $"{result.Id}-{result.Type}-{result.Language}",
             Name = result.Title,

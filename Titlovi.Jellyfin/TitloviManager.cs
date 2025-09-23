@@ -17,13 +17,10 @@ public class TitloviManager : ITitloviManager
     private readonly ILogger<TitloviManager> logger;
     private readonly HttpClient httpClient;
 
-    public TitloviManager(ILogger<TitloviManager> logger, HttpClient httpClient)
+    public TitloviManager(ILogger<TitloviManager> logger, IHttpClientFactory httpClientFactory)
     {
         this.logger = logger;
-        this.httpClient = httpClient;
-
-        this.httpClient.BaseAddress = new Uri("https://kodi.titlovi.com/api/subtitles/");
-        this.httpClient.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36");
+        this.httpClient = httpClientFactory.CreateClient("HttpKodiClient");
     }
 
     public async Task<TokenInfo?> GetTokenAsync()
@@ -59,6 +56,7 @@ public class TitloviManager : ITitloviManager
             logger.LogWarning("Failed to validate credentials with Titlovi.com");
             return false;
         }
+
         return true;
     }
 

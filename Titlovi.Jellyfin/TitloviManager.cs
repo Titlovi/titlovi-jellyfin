@@ -87,7 +87,7 @@ public class TitloviManager : ITitloviManager
 
     public async Task<byte[]?> DownloadAsync(SubtitleDownload subtitleDownload)
     {
-        var response = await titloviHttpClient.GetAsync($"download?" + subtitleDownload.ToQueryString()).ConfigureAwait(false);
+        var response = await titloviHttpClient.GetAsync("download?" + subtitleDownload.ToQueryString()).ConfigureAwait(false);
         if (response.StatusCode != HttpStatusCode.OK)
         {
             return null;

@@ -112,7 +112,7 @@ public class TitloviSubtitleProvider : ISubtitleProvider
     /// <inheritdoc />
     public async Task<IEnumerable<RemoteSubtitleInfo>> Search(SubtitleSearchRequest request, CancellationToken cancellationToken)
     {
-        var tokenInfo = TitloviJellyfin.Instance?.Configuration.TokenInfo;
+        var tokenInfo = await titloviManager.GetTokenAsync().ConfigureAwait(false);
         var imdbId = request.ProviderIds?.GetValueOrDefault("Imdb");
 
         if (tokenInfo is null || string.IsNullOrEmpty(imdbId))

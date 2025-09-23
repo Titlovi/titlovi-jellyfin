@@ -33,7 +33,7 @@ public class Subtitle
     /// <summary>
     /// Gets or sets the media type identifier.
     /// </summary>
-    /// <value>1 = Movie, 2 = TV Episode</value>
+    /// <value>1 = Movie, 2 = TV Episode.</value>
     [JsonPropertyName("Type")]
     public int Type { get; set; }
 

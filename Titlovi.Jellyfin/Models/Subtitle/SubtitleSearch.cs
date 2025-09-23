@@ -21,7 +21,7 @@ public class SubtitleSearch
     /// <summary>
     /// Gets or sets the media type to search for.
     /// </summary>
-    /// <value>1 = Movie, 2 = TV Episode</value>
+    /// <value>1 = Movie, 2 = TV Episode.</value>
     [JsonPropertyName("type")]
     public int? Type { get; set; }
 
@@ -42,7 +42,7 @@ public class SubtitleSearch
     /// <summary>
     /// Gets or sets the IMDB identifier for the media.
     /// </summary>
-    /// <value>Used for movie searches instead of text query. Format: "tt1234567"</value>
+    /// <value>Used for movie searches instead of text query. Format: "tt1234567".</value>
     [JsonPropertyName("imdbid")]
     public string? ImdbId { get; set; }
 

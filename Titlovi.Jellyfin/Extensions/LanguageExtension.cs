@@ -34,7 +34,7 @@ public static class LanguageExtension
     /// - "mk"/"mkd" → "Makedonski" (Macedonian)
     /// - "sr"/"srp" → "Srpski" (Serbian)
     /// - "sl"/"slv" → "Slovenski" (Slovenian)
-    /// - "cyr"/"cir" → "Cirilica" (Cyrillic script)
+    /// - "cyr"/"cir" → "Cirilica" (Cyrillic script).
     /// </remarks>
     /// <example>
     /// <code>

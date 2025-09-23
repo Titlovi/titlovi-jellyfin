@@ -1,3 +1,4 @@
+using System.Collections.ObjectModel;
 using System.IO.Compression;
 using System.Net;
 using System.Text;
@@ -11,14 +12,23 @@ using Titlovi.Jellyfin.Models.Subtitle;
 namespace Titlovi.Jellyfin;
 
 /// <summary>
-/// Used for communicating with the titlovi.com api.
+/// Implementation of <see cref="ITitloviManager"/> that handles communication with the Titlovi.com API.
 /// </summary>
+/// <remarks>
+/// Uses separate HTTP clients for different API endpoints and provides automatic token management
+/// with caching and refresh functionality.
+/// </remarks>
 public class TitloviManager : ITitloviManager
 {
     private readonly ILogger<TitloviManager> logger;
     private readonly HttpClient kodiHttpClient;
     private readonly HttpClient titloviHttpClient;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="TitloviManager"/> class.
+    /// </summary>
+    /// <param name="logger">Logger for recording API operations and errors.</param>
+    /// <param name="httpClientFactory">Factory for creating configured HTTP clients.</param>
     public TitloviManager(ILogger<TitloviManager> logger, IHttpClientFactory httpClientFactory)
     {
         this.logger = logger;
@@ -27,6 +37,7 @@ public class TitloviManager : ITitloviManager
         this.titloviHttpClient = httpClientFactory.CreateClient("HttpTitloviClient");
     }
 
+    /// <inheritdoc />
     public async Task<TokenInfo?> GetTokenAsync()
     {
         var configuration = TitloviJellyfin.Instance!.Configuration;
@@ -50,6 +61,7 @@ public class TitloviManager : ITitloviManager
         return tokenInfo;
     }
 
+    /// <inheritdoc />
     public async Task<bool> ValidateLoginAsync()
     {
         var body = new StringContent(JsonSerializer.Serialize(TitloviJellyfin.Instance!.Configuration.LoginInfo), Encoding.UTF8, "application/json");
@@ -64,6 +76,7 @@ public class TitloviManager : ITitloviManager
         return true;
     }
 
+    /// <inheritdoc />
     public async Task<SubtitleResults?> SearchAsync(SubtitleSearch subtitleSearch)
     {
         var tokenInfo = await GetTokenAsync().ConfigureAwait(false);
@@ -85,6 +98,7 @@ public class TitloviManager : ITitloviManager
         return JsonSerializer.Deserialize<SubtitleResults>(await response.Content.ReadAsStringAsync().ConfigureAwait(false));
     }
 
+    /// <inheritdoc />
     public async Task<byte[]?> DownloadAsync(SubtitleDownload subtitleDownload)
     {
         var response = await titloviHttpClient.GetAsync("download?" + subtitleDownload.ToQueryString()).ConfigureAwait(false);
@@ -96,14 +110,15 @@ public class TitloviManager : ITitloviManager
         return await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
     }
 
-    public List<byte[]> ExtractSubtitles(byte[] buffer)
+    /// <inheritdoc />
+    public Collection<byte[]> ExtractSubtitles(byte[] buffer)
     {
         try
         {
             using (var memoryStream = new MemoryStream(buffer))
             using (var archive = new ZipArchive(memoryStream, ZipArchiveMode.Read))
             {
-                return archive.Entries
+                return new Collection<byte[]>(archive.Entries
                     .Where(entry => entry.Name.EndsWith(".srt", StringComparison.OrdinalIgnoreCase))
                     .Select(entry =>
                     {
@@ -114,12 +129,12 @@ public class TitloviManager : ITitloviManager
                             return extractedStream.ToArray();
                         }
                     })
-                    .ToList();
+                    .ToList());
             }
         }
         catch (Exception)
         {
-            return new List<byte[]> { buffer };
+            return new Collection<byte[]> { buffer };
         }
     }
 }

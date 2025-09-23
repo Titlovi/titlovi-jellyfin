@@ -15,15 +15,24 @@ using Titlovi.Jellyfin.Models.Subtitle;
 namespace Titlovi.Jellyfin.Providers;
 
 /// <summary>
-/// Actual provider that gives jellyfin
-/// access to subtitles from titlovi.com.
+/// Subtitle provider implementation that integrates Jellyfin with the Titlovi.com subtitle service.
 /// </summary>
+/// <remarks>
+/// This provider handles searching for and downloading subtitles from Titlovi.com for movies and TV episodes.
+/// Supports multiple Balkan languages and requires user authentication via login credentials.
+/// </remarks>
 public class TitloviSubtitleProvider : ISubtitleProvider
 {
     private readonly ILogger<TitloviSubtitleProvider> logger;
     private readonly ITitloviManager titloviManager;
     private readonly IMediaEncoder mediaEncoder;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="TitloviSubtitleProvider"/> class.
+    /// </summary>
+    /// <param name="logger">Logger for recording provider operations and errors.</param>
+    /// <param name="titloviManager">Manager for handling Titlovi.com API operations.</param>
+    /// <param name="mediaEncoder">Media encoder for analyzing media file properties.</param>
     public TitloviSubtitleProvider(ILogger<TitloviSubtitleProvider> logger, ITitloviManager titloviManager, IMediaEncoder mediaEncoder)
     {
         this.logger = logger;
@@ -37,10 +46,24 @@ public class TitloviSubtitleProvider : ISubtitleProvider
     /// <inheritdoc />
     public IEnumerable<VideoContentType> SupportedMediaTypes => new[]
     {
-      VideoContentType.Episode,
-      VideoContentType.Movie
+        VideoContentType.Episode,
+        VideoContentType.Movie
     };
 
+    /// <summary>
+    /// Downloads and returns subtitle content for the specified subtitle ID.
+    /// </summary>
+    /// <param name="id">
+    /// Composite subtitle identifier in format "MediaId-Type-Language"
+    /// (e.g., "12345-1-Hrvatski").
+    /// </param>
+    /// <param name="cancellationToken">Token to cancel the download operation.</param>
+    /// <returns>
+    /// A <see cref="SubtitleResponse"/> containing the subtitle stream and metadata.
+    /// </returns>
+    /// <exception cref="FormatException">Thrown when the subtitle ID format is invalid.</exception>
+    /// <exception cref="HttpRequestException">Thrown when the download from Titlovi.com fails.</exception>
+    /// <exception cref="InvalidDataException">Thrown when the downloaded data contains no subtitles.</exception>
     /// <inheritdoc />
     public async Task<SubtitleResponse> GetSubtitles(string id, CancellationToken cancellationToken)
     {
@@ -67,18 +90,25 @@ public class TitloviSubtitleProvider : ISubtitleProvider
             throw new InvalidDataException("Data received didn't contain any subtitles!");
         }
 
-        logger.LogInformation("Number of subtitles detected in stream: {Count}", subtitles.Count);
-
         return new SubtitleResponse()
         {
             Format = "srt",
             IsForced = false,
             IsHearingImpaired = false,
-            Language = idParts[2].FromProviderLanguage(),
+            Language = idParts[2].FromProviderLanguage(), // Convert from provider language to ISO code
             Stream = new MemoryStream(subtitles[0]),
         };
     }
 
+    /// <summary>
+    /// Searches for available subtitles matching the given media request.
+    /// </summary>
+    /// <param name="request">Search criteria including media identifiers and metadata.</param>
+    /// <param name="cancellationToken">Token to cancel the search operation.</param>
+    /// <returns>
+    /// Collection of available subtitle options ordered by download count and rating.
+    /// Returns empty collection if no authentication token or IMDB ID is available.
+    /// </returns>
     /// <inheritdoc />
     public async Task<IEnumerable<RemoteSubtitleInfo>> Search(SubtitleSearchRequest request, CancellationToken cancellationToken)
     {
@@ -127,8 +157,7 @@ public class TitloviSubtitleProvider : ISubtitleProvider
             }
         }
 
-        // TODO :: the results should also take into considaration the media
-        // information from `GetMediaStreamsAsync`. (such as the `encoder`, `resolution`...)
+        // TODO: Consider media information from GetMediaStreamsAsync (encoder, resolution, etc.)
 
         return subtitles.Select(result => new RemoteSubtitleInfo()
         {
@@ -143,9 +172,20 @@ public class TitloviSubtitleProvider : ISubtitleProvider
             Author = string.Empty,
             Comment = result.Release,
             ThreeLetterISOLanguageName = result.Language.FromProviderLanguage()
-        }).OrderByDescending(result => result.DownloadCount).ThenByDescending(result => result.CommunityRating);
+        }).OrderByDescending(result => result.DownloadCount)
+          .ThenByDescending(result => result.CommunityRating);
     }
 
+    /// <summary>
+    /// Retrieves detailed media information including stream properties for the specified media file.
+    /// </summary>
+    /// <param name="mediaPath">Full path to the media file to analyze.</param>
+    /// <param name="cancellationToken">Token to cancel the media analysis operation.</param>
+    /// <returns>Media information including codec, resolution, and stream details.</returns>
+    /// <remarks>
+    /// Currently unused but intended for future enhancement to match subtitles based on
+    /// media properties like resolution, codec, and release group.
+    /// </remarks>
     private async Task<MediaInfo> GetMediaStreamsAsync(string mediaPath, CancellationToken cancellationToken)
     {
         var requestInfo = new MediaInfoRequest

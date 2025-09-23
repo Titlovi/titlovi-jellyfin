@@ -8,10 +8,19 @@ using Titlovi.Jellyfin.Providers;
 namespace Titlovi.Jellyfin;
 
 /// <summary>
-/// Used for registering services.
+/// Service registrator for configuring dependency injection for the Titlovi subtitle plugin.
 /// </summary>
+/// <remarks>
+/// Registers all required services and HTTP clients needed for Titlovi.com integration
+/// with the Jellyfin dependency injection container.
+/// </remarks>
 public class TitloviServiceRegistrator : IPluginServiceRegistrator
 {
+    /// <summary>
+    /// Registers all services and HTTP clients required by the Titlovi.Jellyfin plugin.
+    /// </summary>
+    /// <param name="serviceCollection">The service collection to register services with.</param>
+    /// <param name="applicationHost">The Jellyfin application host instance.</param>
     /// <inheritdoc />
     public void RegisterServices(IServiceCollection serviceCollection, IServerApplicationHost applicationHost)
     {

@@ -8,13 +8,11 @@ public static class QueryStringExtensions
     /// <summary>
     /// Converts an object's properties to a URL-encoded query string
     /// </summary>
-    /// <typeparam name="T">The type of object to convert</typeparam>
-    /// <param name="obj">The object instance to convert to query string</param>
-    /// <returns>A URL-encoded query string (without the leading '?')</returns>
+    /// <param name="obj">The object to convert</param>
+    /// <returns>URL-encoded query string without leading '?'</returns>
     /// <example>
-    /// var person = new { Name = "John Doe", Age = 30, City = "New York" };
-    /// string queryString = person.ToQueryString();
-    /// // Result: "Name=John%20Doe&Age=30&City=New%20York"
+    /// var person = new { Name = "John Doe", Age = 30 };
+    /// string query = person.ToQueryString(); // "Name=John%20Doe&Age=30"
     /// </example>
     public static string ToQueryString<T>(this T obj)
     {

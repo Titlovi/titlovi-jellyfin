@@ -7,13 +7,21 @@ using Titlovi.Jellyfin.Configuration;
 
 namespace Titlovi.Jellyfin;
 
+/// <summary>
+/// Main plugin class for the Titlovi.com subtitle provider integration with Jellyfin.
+/// </summary>
+/// <remarks>
+/// This plugin enables Jellyfin to search for and download subtitles from Titlovi.com,
+/// a popular subtitle service for Balkan languages. Provides a web-based configuration
+/// interface for setting up user credentials.
+/// </remarks>
 public class TitloviJellyfin : BasePlugin<TitloviConfiguration>, IHasWebPages
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="TitloviJellyfin"/> class.
     /// </summary>
-    /// <param name="applicationPaths">Instance of the <see cref="IApplicationPaths"/> interface.</param>
-    /// <param name="xmlSerializer">Instance of the <see cref="IXmlSerializer"/> interface.</param>
+    /// <param name="applicationPaths">Jellyfin application paths for configuration storage.</param>
+    /// <param name="xmlSerializer">XML serializer for configuration persistence.</param>
     public TitloviJellyfin(IApplicationPaths applicationPaths, IXmlSerializer xmlSerializer)
         : base(applicationPaths, xmlSerializer)
     {
@@ -27,8 +35,12 @@ public class TitloviJellyfin : BasePlugin<TitloviConfiguration>, IHasWebPages
     public override Guid Id => Guid.Parse("6e25df50-638e-4109-a50b-03c14fc93fdd");
 
     /// <summary>
-    /// Gets the current plugin instance.
+    /// Gets the current plugin instance for global access.
     /// </summary>
+    /// <value>
+    /// The singleton instance of the plugin, or null if not yet initialized.
+    /// Used by other plugin components to access configuration and services.
+    /// </value>
     public static TitloviJellyfin? Instance { get; private set; }
 
     /// <inheritdoc />

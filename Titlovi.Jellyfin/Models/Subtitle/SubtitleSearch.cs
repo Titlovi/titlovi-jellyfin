@@ -18,4 +18,16 @@ public class SubtitleSearch
 
     [JsonPropertyName("pg")]
     public int? Page { get; set; }
+
+    [JsonPropertyName("ignoreLangAndEpisode")]
+    public bool? IgnoreLangAndEpisode { get; set; }
+
+    [JsonPropertyName("lang")]
+    public string? Lang { get; set; }
+
+    [JsonPropertyName("token")]
+    public string? Token { get; set; }
+
+    [JsonPropertyName("userid")]
+    public int? UserId { get; set; }
 }

@@ -15,5 +15,5 @@ public class SubtitleResults
     public int CurrentPage { get; set; }
 
     [JsonPropertyName("SubtitleResults")]
-    public Collection<Subtitle> Results { get; set; } = [];
+    public Collection<Subtitle> Results { get; init; } = [];
 }

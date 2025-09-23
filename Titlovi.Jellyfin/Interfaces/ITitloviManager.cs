@@ -9,12 +9,19 @@ namespace Titlovi.Jellyfin.Interfaces;
 public interface ITitloviManager
 {
     /// <summary>
+    /// Gets the token information based on
+    /// the provided login detials from the config.
+    /// </summary>
+    Task<TokenInfo?> GetTokenAsync();
+
+    /// <summary>
     /// Validates the login information.
     /// </summary>
-    /// <param name="loginInfo">
-    /// Login information that you are trying to validate.
-    /// </param>
-    Task<bool> ValidateLogin(LoginInfo loginInfo);
+    Task<bool> ValidateLoginAsync();
 
-    Task<SubtitleResults> SearchAsync(LoginInfo loginInfo, SubtitleSearch subtitleSearch);
+    /// <summary>
+    /// Queires the titlovi database with
+    /// the provided search parameters.
+    /// </summary>
+    Task<SubtitleResults?> SearchAsync(SubtitleSearch subtitleSearch);
 }

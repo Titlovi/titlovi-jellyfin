@@ -1,12 +1,14 @@
-using System.Globalization;
-using Jellyfin.Data.Entities.Libraries;
+using MediaBrowser.Controller.MediaEncoding;
 using MediaBrowser.Controller.Providers;
 using MediaBrowser.Controller.Subtitles;
+using MediaBrowser.Model.Dlna;
+using MediaBrowser.Model.Dto;
+using MediaBrowser.Model.Entities;
+using MediaBrowser.Model.MediaInfo;
 using MediaBrowser.Model.Providers;
 using Microsoft.Extensions.Logging;
+using Titlovi.Jellyfin.Extensions;
 using Titlovi.Jellyfin.Interfaces;
-using Titlovi.Jellyfin.Models;
-using Titlovi.Jellyfin.Models.Subtitle;
 
 namespace Titlovi.Jellyfin.Providers;
 
@@ -14,15 +16,17 @@ namespace Titlovi.Jellyfin.Providers;
 /// Actual provider that gives jellyfin
 /// access to subtitles from titlovi.com.
 /// </summary>
-public class TitloviSubtitlesProvider : ISubtitleProvider
+public class TitloviSubtitleProvider : ISubtitleProvider
 {
-    private readonly ILogger<TitloviSubtitlesProvider> logger;
+    private readonly ILogger<TitloviSubtitleProvider> logger;
     private readonly ITitloviManager titloviManager;
+    private readonly IMediaEncoder mediaEncoder;
 
-    public TitloviSubtitlesProvider(ILogger<TitloviSubtitlesProvider> logger, ITitloviManager titloviManager)
+    public TitloviSubtitleProvider(ILogger<TitloviSubtitleProvider> logger, ITitloviManager titloviManager, IMediaEncoder mediaEncoder)
     {
         this.logger = logger;
         this.titloviManager = titloviManager;
+        this.mediaEncoder = mediaEncoder;
     }
 
     /// <inheritdoc />
@@ -44,29 +48,44 @@ public class TitloviSubtitlesProvider : ISubtitleProvider
     /// <inheritdoc />
     public async Task<IEnumerable<RemoteSubtitleInfo>> Search(SubtitleSearchRequest request, CancellationToken cancellationToken)
     {
-        var imdbId = request.ProviderIds?.GetValueOrDefault("Imdb");
-        if (string.IsNullOrEmpty(imdbId))
+        logger.LogInformation("{Name} - {Language}", request.Name, request.Language);
+
+
+        request.Language.ToProviderLanguage();
+
+        var filePath = request.MediaPath;
+
+        var mediaSource = new MediaSourceInfo
         {
-            return [];
+            Id = Guid.NewGuid().ToString(),
+            Path = filePath,
+            Protocol = MediaProtocol.File,
+            Container = System.IO.Path.GetExtension(filePath).TrimStart('.')
+        };
+
+        var requestInfo = new MediaInfoRequest
+        {
+            MediaSource = mediaSource,
+            ExtractChapters = false,
+            MediaType = DlnaProfileType.Video
+        };
+
+        var mediaInfo = await mediaEncoder.GetMediaInfo(requestInfo, cancellationToken);
+        foreach (var stream in mediaInfo.MediaStreams)
+        {
+            switch (stream.Type)
+            {
+                case MediaStreamType.Video:
+                    logger.LogInformation("Video codec: {Codec}-{CodecTag}", stream.Codec, stream.CodecTag);
+                    logger.LogInformation("Profile: {Profile}", stream.Profile);
+                    logger.LogInformation("Level: {Level}", stream.Level);
+                    logger.LogInformation("Bitrate: {BitRate}", stream.BitRate);
+                    logger.LogInformation("Resolution: {Width}x{Height}", stream.Width, stream.Height);
+                    break;
+            }
         }
 
-        var response = await titloviManager.SearchAsync(
-            new LoginInfo() { Username = TitloviJellyfin.Instance?.Configuration.Username!, Password = TitloviJellyfin.Instance?.Configuration.Password! },
-            new SubtitleSearch() { ImdbId = imdbId }
-        ).ConfigureAwait(false);
 
-        return response.Results.Select(result =>
-        {
-            return new RemoteSubtitleInfo()
-            {
-                Id = Convert.ToString(result.Id, CultureInfo.InvariantCulture),
-                ProviderName = Name,
-                AiTranslated = false,
-                Name = result.Title,
-                CommunityRating = result.Rating,
-                DownloadCount = result.DownloadCount,
-                Format = "srt",
-            };
-        }).ToList().OrderBy(result => result.DownloadCount).Reverse();
+        return new List<RemoteSubtitleInfo>();
     }
 }

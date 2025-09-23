@@ -1,4 +1,5 @@
 using MediaBrowser.Model.Plugins;
+using Titlovi.Jellyfin.Models;
 
 namespace Titlovi.Jellyfin.Configuration;
 
@@ -8,14 +9,18 @@ namespace Titlovi.Jellyfin.Configuration;
 public class TitloviConfiguration : BasePluginConfiguration
 {
     /// <summary>
-    /// Gets or sets a username used for authenticating
-    /// with the Titlovi api endpoint.
+    /// Gets or sets a login information
+    /// used for authenticating with the Titlovi api endpoint.
     /// </summary>
-    public string Username { get; set; } = string.Empty;
+    public LoginInfo LoginInfo { get; set; } = new LoginInfo()
+    {
+        Username = string.Empty,
+        Password = string.Empty
+    };
 
     /// <summary>
-    /// Gets or sets a password used for authenticating
-    /// with the Titlovi api endpoint.
+    /// Gets or sets a token information
+    /// used for communication with the Titlovi api endpoint.
     /// </summary>
-    public string Password { get; set; } = string.Empty;
+    public TokenInfo? TokenInfo { get; set; } = null;
 }

@@ -4,7 +4,6 @@ using MediaBrowser.Controller.Subtitles;
 using Microsoft.Extensions.DependencyInjection;
 using Titlovi.Jellyfin.Interfaces;
 using Titlovi.Jellyfin.Providers;
-using Titlovi.Jellyfin.Services;
 
 namespace Titlovi.Jellyfin;
 
@@ -17,6 +16,6 @@ public class TitloviServiceProvider : IPluginServiceRegistrator
     public void RegisterServices(IServiceCollection serviceCollection, IServerApplicationHost applicationHost)
     {
         serviceCollection.AddSingleton<ITitloviManager, TitloviManager>();
-        serviceCollection.AddSingleton<ISubtitleProvider, TitloviSubtitlesProvider>();
+        serviceCollection.AddSingleton<ISubtitleProvider, TitloviSubtitleProvider>();
     }
 }

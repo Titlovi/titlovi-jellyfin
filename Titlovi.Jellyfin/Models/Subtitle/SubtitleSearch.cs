@@ -7,6 +7,9 @@ public class SubtitleSearch
     [JsonPropertyName("query")]
     public string? Query { get; set; }
 
+    [JsonPropertyName("type")]
+    public int? Type { get; set; }
+
     [JsonPropertyName("season")]
     public int? Season { get; set; }
 

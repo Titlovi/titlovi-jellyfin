@@ -95,6 +95,7 @@ public class TitloviSubtitleProvider : ISubtitleProvider
             Token = tokenInfo.Token.ToString(),
             ImdbId = request.ParentIndexNumber is null ? imdbId : null,
             Query = request.ParentIndexNumber is not null ? request.SeriesName : null,
+            Type = request.ParentIndexNumber is not null ? 2 : 1,
             Lang = request.Language.ToProviderLanguage(),
             IgnoreLangAndEpisode = false,
             Season = request.ParentIndexNumber,

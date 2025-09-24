@@ -38,15 +38,8 @@ jobs:
     needs:
       - upload
     steps:
-      - name: Checkout Github pages branch
-        uses: actions/checkout@v3
-        with:
-          repository: ${{ github.repository }}
-          ref: gh-pages
-          token: ${{ secrets.ACTION_TOKEN }}
       - name: Generate repository manifest
         uses: Kevinjil/jellyfin-plugin-repo-action@v0.4.3
         with:
           githubToken: ${{ secrets.ACTION_TOKEN }}
           repository: ${{ github.repository }}
-          pagesBranch: "gh-pages"

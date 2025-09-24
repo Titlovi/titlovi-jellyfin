@@ -8,7 +8,6 @@ on:
 
 jobs:
   publish-repo:
-    needs: build
     runs-on: ubuntu-latest
     permissions:
       contents: write

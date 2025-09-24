@@ -1,1 +1,20 @@
-{"repositories": []}
+[
+  {
+    "category": "Metadata",
+    "description": "This plugin allows Jellyfin users to seamlessly access and download subtitles from Titlovi.com directly within the media server, instead of manually searching for subtitle files. You can browse and fetch them through Jellyfin’s interface, ensuring your movies and TV shows are always synced with high-quality, community-provided subtitles in multiple languages.\n",
+    "guid": "6e25df50-638e-4109-a50b-03c14fc93fdd",
+    "name": "Titlovi.com",
+    "overview": "get access to subtitles from titlovi.com directly in jellyfin.",
+    "owner": "maatko",
+    "versions": [
+      {
+        "changelog": "v1.0.0",
+        "checksum": "8e3bda5877a9cbf9a2cf6ab7cbd56d46",
+        "sourceUrl": "https://github.com/maatko/jellyfin-titlovi/releases/download/v1.0.0/titlovi-com_1.0.0.0.zip",
+        "targetAbi": "10.10.7.0",
+        "timestamp": "2025-09-24T19:23:09Z",
+        "version": "1.0.0.0"
+      }
+    ]
+  }
+]

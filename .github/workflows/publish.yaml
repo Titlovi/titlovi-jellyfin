@@ -6,9 +6,21 @@ on:
       - released
   workflow_dispatch:
 
-jobs:
-  call:
-    uses: Kevinjil/jellyfin-plugin-repo-action@v0.4.3
-    secrets:
-      githubToken: ${{ secrets.GITHUB_TOKEN }}
-      repository: "maatko/jellyfin-titlovi"
+publish-repo:
+  needs: build
+  runs-on: ubuntu-latest
+  permissions:
+    contents: write
+  steps:
+    - name: Checkout plugin repo
+      uses: actions/checkout@v3
+      with:
+        repository: maatko/jellyfin-titlovi
+        ref: main
+        token: ${{ secrets.GITHUB_TOKEN }}
+        
+    - name: Jellyfin plugin repo
+      uses: Kevinjil/jellyfin-plugin-repo-action@v0.4.3
+      with:
+        githubToken: ${{ secrets.GITHUB_TOKEN }}
+        repository: "maatko/jellyfin-titlovi"

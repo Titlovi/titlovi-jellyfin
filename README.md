@@ -9,7 +9,7 @@ ensuring your movies and TV shows are always synced with high-quality, community
 
 ## installation
 
-the plugin can be installed using a custom plugin repository. To add the repository, follow these steps:
+the plugin can be installed through a custom plugin repository.
 
 ### repository
 
@@ -30,4 +30,17 @@ the plugin can be installed using a custom plugin repository. To add the reposit
 4. from there find the `Titlovi.com` plugin and click it
 5. click the `Install` button
 
-*keep on mind, most plugin installs will require a restart of jellyfin!*
+**keep on mind, most plugin installs will require a restart of jellyfin!**
+
+## configuration
+
+before the plugin can be used you will have to configure it. you will need to provide
+the following information in the configuration page, for the plugin to function correctly.
+(*your authentication information is only stored on the local jellyfin server via its configuration system.*)
+
+| Property | Description                                                                               |
+| -------- | ----------------------------------------------------------------------------------------- |
+| Username | The username used to authenticate with titlovi.com                                        |
+| Password | The password used to authenticate with titlovi.com                                        |
+
+**rate limits might apply if you dont have don't have a "zmaj supporter" subscription active**

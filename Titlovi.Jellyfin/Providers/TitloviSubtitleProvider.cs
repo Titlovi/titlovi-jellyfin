@@ -1,10 +1,12 @@
 using System.Collections.ObjectModel;
 using System.Globalization;
+using FuzzySharp;
 using MediaBrowser.Controller.MediaEncoding;
 using MediaBrowser.Controller.Providers;
 using MediaBrowser.Controller.Subtitles;
 using MediaBrowser.Model.Dlna;
 using MediaBrowser.Model.Dto;
+using MediaBrowser.Model.Entities;
 using MediaBrowser.Model.MediaInfo;
 using MediaBrowser.Model.Providers;
 using Microsoft.Extensions.Logging;
@@ -157,11 +159,10 @@ public class TitloviSubtitleProvider : ISubtitleProvider
             }
         }
 
-        // TODO: Consider media information from GetMediaStreamsAsync (encoder, resolution, etc.)
-
+        var mediaInfo = await GetMediaInfoAsync(request.MediaPath, cancellationToken).ConfigureAwait(false);
         return subtitles.Select(result => new RemoteSubtitleInfo()
         {
-            Id = $"{result.Id}-{result.Type}-{result.Language}",
+            Id = $"{result.Id}-{result.Type}-{result.Language}-{HashScore(mediaInfo, result)}",
             Name = result.Title,
             CommunityRating = result.Rating,
             DownloadCount = result.DownloadCount,
@@ -173,7 +174,49 @@ public class TitloviSubtitleProvider : ISubtitleProvider
             Comment = result.Release,
             ThreeLetterISOLanguageName = result.Language.FromProviderLanguage()
         }).OrderByDescending(result => result.DownloadCount)
-          .ThenByDescending(result => result.CommunityRating);
+        .OrderByDescending(result => result.CommunityRating)
+        .OrderByDescending(result => Convert.ToInt32(result.Id.Split("-")[3], CultureInfo.InvariantCulture));
+    }
+
+    /// <summary>
+    /// Calculates a compatibility score between media file and subtitle by matching
+    /// technical details (codec, resolution) found in the subtitle's release name.
+    /// </summary>
+    /// <param name="mediaInfo">Media file information containing stream details.</param>
+    /// <param name="subtitle">Subtitle object with release name to match against.</param>
+    /// <returns>Score indicating compatibility (0 = no match, higher = better match).</returns>
+    public int HashScore(MediaInfo mediaInfo, Subtitle subtitle)
+    {
+        var release = subtitle.Release;
+        if (string.IsNullOrEmpty(release))
+        {
+            return 0;
+        }
+
+        release = release.ToLowerInvariant();
+
+        int hashScore = 0;
+        foreach (var stream in mediaInfo.MediaStreams)
+        {
+            switch (stream.Type)
+            {
+                case MediaStreamType.Video:
+                    hashScore += Fuzz.PartialRatio(stream.Codec.ToLowerInvariant(), release);
+
+                    var height = Convert.ToString(stream.Height, CultureInfo.InvariantCulture);
+                    if (height is not null)
+                    {
+                        hashScore += Fuzz.PartialRatio(height, release);
+                    }
+
+                    break;
+                case MediaStreamType.Audio:
+                    hashScore += Fuzz.PartialRatio(stream.Codec.ToLowerInvariant(), release);
+                    break;
+            }
+        }
+
+        return hashScore;
     }
 
     /// <summary>
@@ -186,7 +229,7 @@ public class TitloviSubtitleProvider : ISubtitleProvider
     /// Currently unused but intended for future enhancement to match subtitles based on
     /// media properties like resolution, codec, and release group.
     /// </remarks>
-    private async Task<MediaInfo> GetMediaStreamsAsync(string mediaPath, CancellationToken cancellationToken)
+    private async Task<MediaInfo> GetMediaInfoAsync(string mediaPath, CancellationToken cancellationToken)
     {
         var requestInfo = new MediaInfoRequest
         {

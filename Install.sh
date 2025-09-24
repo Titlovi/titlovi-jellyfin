@@ -39,11 +39,11 @@ fi
 
 # Build the plugin
 echo "Building $PLUGIN_NAME project..."
-dotnet build "$PLUGIN_NAME"
+dotnet publish "$PLUGIN_NAME"
 
 # Copy only DLL files
 echo "Copying DLL files to $TARGET_DIR..."
-sudo find "$SOURCE_DIR/bin/Debug/net8.0/" -name "*.dll" -exec cp {} "$TARGET_DIR/" \;
+sudo find "$SOURCE_DIR/bin/Release/net8.0/publish/" -name "*.dll" -exec cp {} "$TARGET_DIR/" \;
 
 # Check if any DLLs were found and copied
 DLL_COUNT=$(find "$SOURCE_DIR" -name "*.dll" | wc -l)

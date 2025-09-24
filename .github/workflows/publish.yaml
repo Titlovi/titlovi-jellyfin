@@ -38,8 +38,15 @@ jobs:
     needs:
       - upload
     steps:
+      - name: Checkout plugin repo
+        uses: actions/checkout@v3
+        with:
+          repository: ${{ github.repository }}
+          ref: gh-pages
+          token: ${{ secrets.GITHUB_TOKEN }}
       - name: Jellyfin plugin repo
         uses: Kevinjil/jellyfin-plugin-repo-action@v0.4.3
         with:
           githubToken: ${{ secrets.GITHUB_TOKEN }}
           repository: ${{ github.repository }}
+          pagesBranch: "gh-pages"

@@ -8,11 +8,7 @@ on:
 
 jobs:
   call:
-    uses: jellyfin/jellyfin-meta-plugins/.github/workflows/publish.yaml@master
-    with:
-      version: ${{ github.event.release.tag_name }}
-      is-unstable: ${{ github.event.release.prerelease }}
+    uses: Kevinjil/jellyfin-plugin-repo-action@v0.4.3
     secrets:
-      deploy-host: ${{ secrets.DEPLOY_HOST }}
-      deploy-user: ${{ secrets.DEPLOY_USER }}
-      deploy-key: ${{ secrets.DEPLOY_KEY }}
+      githubToken: ${{ secrets.GITHUB_TOKEN }}
+      repository: "maatko/jellyfin-titlovi"

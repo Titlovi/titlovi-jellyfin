@@ -1,7 +1,7 @@
-# jellyfin-titlovi
+# titlovi-jellyfin
 
-![Dynamic YAML Badge](https://img.shields.io/badge/dynamic/yaml?url=https%3A%2F%2Fraw.githubusercontent.com%2Fmaatko%2Fjellyfin-titlovi%2Frefs%2Fheads%2Fmain%2Fbuild.yaml&query=targetAbi&label=Jellyfin%20ABI)
-![Dynamic YAML Badge](https://img.shields.io/badge/dynamic/yaml?url=https%3A%2F%2Fraw.githubusercontent.com%2Fmaatko%2Fjellyfin-titlovi%2Frefs%2Fheads%2Fmain%2Fbuild.yaml&query=framework&label=.NET%20Framework)
+![Dynamic YAML Badge](https://img.shields.io/badge/dynamic/yaml?url=https%3A%2F%2Fraw.githubusercontent.com%2Ftitlovi%2Ftitlovi-jellyfin%2Frefs%2Fheads%2Fmain%2Fbuild.yaml&query=targetAbi&label=Jellyfin%20ABI)
+![Dynamic YAML Badge](https://img.shields.io/badge/dynamic/yaml?url=https%3A%2F%2Fraw.githubusercontent.com%2Ftitlovi%2Ftitlovi-jellyfin%2Frefs%2Fheads%2Fmain%2Fbuild.yaml&query=framework&label=.NET%20Framework)
 
 This plugin allows Jellyfin users to seamlessly access and download subtitles from Titlovi.com directly within the media server,
 instead of manually searching for subtitle files. You can browse and fetch them through Jellyfin’s interface,
@@ -19,7 +19,7 @@ the plugin can be installed through a custom plugin repository.
 4. next click the `+` button to add a new repository
 5. fill out the required information with following
    - **Repository Name** = `Titlovi`
-   - **Repository Url** = `https://maatko.github.io/jellyfin-titlovi/repository.json`
+   - **Repository Url** = `https://titlovi.github.io/titlovi-jellyfin/repository.json`
 6. finally click the save button
 
 ### plugin

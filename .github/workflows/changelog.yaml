@@ -11,6 +11,11 @@ on:
     types:
       - update-prep-command
 
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
 jobs:
   call:
     uses: jellyfin/jellyfin-meta-plugins/.github/workflows/changelog.yaml@master

@@ -6,6 +6,11 @@ on:
     types:
       - created
 
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
 jobs:
   call:
     uses: jellyfin/jellyfin-meta-plugins/.github/workflows/command-dispatch.yaml@master

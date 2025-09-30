@@ -41,5 +41,5 @@ jobs:
       - name: Generate repository manifest
         uses: Kevinjil/jellyfin-plugin-repo-action@v0.4.3
         with:
-          githubToken: ${{ secrets.ACTION_TOKEN }}
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
           repository: ${{ github.repository }}

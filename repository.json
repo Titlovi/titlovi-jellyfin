@@ -8,7 +8,15 @@
     "owner": "maatko",
     "versions": [
       {
-        "changelog": "v1.0.0",
+        "changelog": "+ Support for subtitle episode collections",
+        "checksum": "df07942811b8da45c2acc5f0b337b268",
+        "sourceUrl": "https://github.com/Titlovi/titlovi-jellyfin/releases/download/v1.1.0/titlovi-com_1.1.0.0.zip",
+        "targetAbi": "10.10.7.0",
+        "timestamp": "2025-10-07T13:18:50Z",
+        "version": "1.1.0.0"
+      },
+      {
+        "changelog": "Initial release of the plugin.",
         "checksum": "e80d6765121841626cd3ae88561a9a11",
         "sourceUrl": "https://github.com/Titlovi/titlovi-jellyfin/releases/download/v1.0.0/titlovi-com_1.0.0.0.zip",
         "targetAbi": "10.10.7.0",

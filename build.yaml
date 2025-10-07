@@ -1,7 +1,7 @@
 ---
 name: "Titlovi.com"
 guid: "6e25df50-638e-4109-a50b-03c14fc93fdd"
-version: "1.0.0.0"
+version: "1.1.0.0"
 targetAbi: "10.10.7.0"
 framework: "net8.0"
 overview: "get access to subtitles from titlovi.com directly in jellyfin."
@@ -15,4 +15,4 @@ artifacts:
 - "Titlovi.Jellyfin.dll"
 - "FuzzySharp.dll"
 changelog: >
-  Initial Release
+  Added support for Subtitle packs.

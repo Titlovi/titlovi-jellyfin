@@ -1,5 +1,6 @@
 using System.Collections.ObjectModel;
 using System.Globalization;
+using System.Text.RegularExpressions;
 using FuzzySharp;
 using MediaBrowser.Controller.MediaEncoding;
 using MediaBrowser.Controller.Providers;
@@ -70,7 +71,7 @@ public class TitloviSubtitleProvider : ISubtitleProvider
     public async Task<SubtitleResponse> GetSubtitles(string id, CancellationToken cancellationToken)
     {
         var idParts = id.Split('-');
-        if (idParts.Length < 3)
+        if (idParts.Length < 6)
         {
             throw new FormatException($"Invalid subtitle id format: {id}");
         }
@@ -91,15 +92,35 @@ public class TitloviSubtitleProvider : ISubtitleProvider
         {
             throw new InvalidDataException("Data received didn't contain any subtitles!");
         }
-
-        return new SubtitleResponse()
+        else if (subtitles.Count == 1)
         {
-            Format = "srt",
-            IsForced = false,
-            IsHearingImpaired = false,
-            Language = idParts[2].FromProviderLanguage(), // Convert from provider language to ISO code
-            Stream = new MemoryStream(subtitles[0]),
-        };
+            return new SubtitleResponse
+            {
+                Format = "srt",
+                IsForced = false,
+                IsHearingImpaired = false,
+                Language = idParts[2].FromProviderLanguage(),
+                Stream = new MemoryStream(subtitles[0].Buffer),
+            };
+        }
+
+        foreach (var subtitle in subtitles)
+        {
+            if (Regex.IsMatch(subtitle.Path, @$"S0?{idParts[4]}E0?{idParts[5]}", RegexOptions.IgnoreCase))
+            {
+                logger.LogInformation("Selected this {Path}", subtitle.Path);
+                return new SubtitleResponse
+                {
+                    Format = "srt",
+                    IsForced = false,
+                    IsHearingImpaired = false,
+                    Language = idParts[2].FromProviderLanguage(),
+                    Stream = new MemoryStream(subtitle.Buffer),
+                };
+            }
+        }
+
+        throw new InvalidDataException("Failed to locate any valid subtitles!");
     }
 
     /// <summary>
@@ -141,6 +162,17 @@ public class TitloviSubtitleProvider : ISubtitleProvider
             return new List<RemoteSubtitleInfo>();
         }
 
+        if (response.Results.Count == 0)
+        {
+            searchQuery.Episode = null;
+
+            response = await titloviManager.SearchAsync(searchQuery).ConfigureAwait(false);
+            if (response is null)
+            {
+                return new List<RemoteSubtitleInfo>();
+            }
+        }
+
         var subtitles = new Collection<Subtitle>(response.Results);
         if (response.PagesAvailable > 1)
         {
@@ -162,7 +194,7 @@ public class TitloviSubtitleProvider : ISubtitleProvider
         var mediaInfo = await GetMediaInfoAsync(request.MediaPath, cancellationToken).ConfigureAwait(false);
         return subtitles.Select(result => new RemoteSubtitleInfo()
         {
-            Id = $"{result.Id}-{result.Type}-{result.Language}-{HashScore(mediaInfo, result)}",
+            Id = $"{result.Id}-{result.Type}-{result.Language}-{HashScore(mediaInfo, result)}-{searchQuery.Season}-{request.IndexNumber}",
             Name = result.Title,
             CommunityRating = result.Rating,
             DownloadCount = result.DownloadCount,

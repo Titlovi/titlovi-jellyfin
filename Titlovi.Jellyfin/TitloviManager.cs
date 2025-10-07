@@ -111,14 +111,14 @@ public class TitloviManager : ITitloviManager
     }
 
     /// <inheritdoc />
-    public Collection<byte[]> ExtractSubtitles(byte[] buffer)
+    public Collection<(string Path, byte[] Buffer)> ExtractSubtitles(byte[] buffer)
     {
         try
         {
             using (var memoryStream = new MemoryStream(buffer))
             using (var archive = new ZipArchive(memoryStream, ZipArchiveMode.Read))
             {
-                return new Collection<byte[]>(archive.Entries
+                return new Collection<(string, byte[])>(archive.Entries
                     .Where(entry => entry.Name.EndsWith(".srt", StringComparison.OrdinalIgnoreCase))
                     .Select(entry =>
                     {
@@ -126,7 +126,7 @@ public class TitloviManager : ITitloviManager
                         using (var extractedStream = new MemoryStream())
                         {
                             entryStream.CopyTo(extractedStream);
-                            return extractedStream.ToArray();
+                            return (entry.Name, extractedStream.ToArray());
                         }
                     })
                     .ToList());
@@ -134,7 +134,7 @@ public class TitloviManager : ITitloviManager
         }
         catch (Exception)
         {
-            return new Collection<byte[]> { buffer };
+            return new Collection<(string, byte[])> { (string.Empty, buffer) };
         }
     }
 }

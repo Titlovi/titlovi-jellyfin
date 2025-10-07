@@ -79,5 +79,5 @@ public interface ITitloviManager
     /// subtitle files (typically .srt format). Multiple subtitle files may be present
     /// in a single archive for different languages or versions.
     /// </remarks>
-    Collection<byte[]> ExtractSubtitles(byte[] buffer);
+    Collection<(string Path, byte[] Buffer)> ExtractSubtitles(byte[] buffer);
 }

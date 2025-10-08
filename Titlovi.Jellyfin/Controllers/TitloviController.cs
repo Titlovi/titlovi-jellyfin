@@ -1,6 +1,7 @@
 namespace Titlovi.Jellyfin.Controllers;
 
 using System.Net.Mime;
+using System.Threading.Tasks;
 using MediaBrowser.Common.Api;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -33,6 +34,34 @@ public class TitloviController : ControllerBase
     {
         this.logger = logger;
         this.titloviManager = titloviManager;
+    }
+
+    /// <summary>
+    /// Attempts to validate the current Titlovi.com login credentials.
+    /// </summary>
+    /// <remarks>
+    /// This endpoint typically checks if the stored username and password or
+    /// an existing authentication token are valid by attempting a login or
+    /// validation check via the <c>ITitloviManager</c> service.
+    /// </remarks>
+    /// <returns>
+    /// Returns:
+    /// <list type="bullet">
+    ///    <item><description><c>200 OK</c> if the authentication or login validation was successful.</description></item>
+    ///    <item><description><c>404 Not Found</c> if the authentication or validation failed (e.g., invalid credentials).</description></item>
+    /// </list>
+    /// </returns>
+    [HttpPost("Authenticate")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult> AuthenticateAsync()
+    {
+        if (await titloviManager.ValidateLoginAsync().ConfigureAwait(false))
+        {
+            return Ok();
+        }
+
+        return StatusCode(StatusCodes.Status404NotFound);
     }
 
     /// <summary>

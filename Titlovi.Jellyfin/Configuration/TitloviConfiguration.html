@@ -11,7 +11,7 @@
     data-require="emby-input,emby-button,emby-select,emby-checkbox">
     <div data-role="content">
       <div class="content-primary" style="max-width:45%;">
-        <form id="titlovi-config-page">
+        <div id="titlovi-config-page">
           <h3>Account</h3>
           <div class="inputContainer">
             <div>
@@ -25,12 +25,13 @@
               <div class="fieldDescription">Password of your account.</div>
             </div>
             <div style="margin-top:5px;">
-              <button is="emby-button" type="submit" class="raised button-submit block emby-button">
-                <span>Save Credentials</span>
+              <button id="titlovi-token-authenticate" is="emby-button" type="button"
+                class="raised button-submit block emby-button">
+                <span>Authenticate</span>
               </button>
             </div>
           </div>
-        </form>
+        </div>
         <div class="content-secondary">
           <label class="inputLabel inputLabelUnfocused" for="titlovi-token">Token</label>
           <input id="titlovi-token" name="titlovi-token" type="password" is="emby-input" disabled />
@@ -45,59 +46,66 @@
       </div>
     </div>
     <script type="text/javascript">
-      var TitloviConfig = {
-        pluginUniqueId: "6e25df50-638e-4109-a50b-03c14fc93fdd"
-      };
-      document.querySelector('#titlovi-config-page')
-        .addEventListener('pageshow', function () {
-          Dashboard.showLoadingMsg();
-          ApiClient.getPluginConfiguration(TitloviConfig.pluginUniqueId).then(function (config) {
-            document.querySelector('#titlovi-username').value = config.LoginInfo.username;
-            document.querySelector('#titlovi-password').value = config.LoginInfo.password;
+      var TitloviConfig = {pluginUniqueId: "6e25df50-638e-4109-a50b-03c14fc93fdd"};
 
-            if (config.TokenInfo) {
-              document.querySelector('#titlovi-token').value = config.TokenInfo.Token;
-              document.querySelector('#titlovi-token-date').textContent = config.TokenInfo.ExpirationDate;
-            }
-            Dashboard.hideLoadingMsg();
-          });
-        });
-      document.querySelector('#titlovi-token-invalidate')
-        .addEventListener('click', function () {
-          const url = ApiClient.getUrl('Titlovi/InvalidateToken');
-          fetch(url, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'X-Emby-Token': ApiClient.accessToken()
-            }
-          }).then(response => {
-            if (response.ok) {
-              document.querySelector('#titlovi-token').value = "";
-              document.querySelector('#titlovi-token-date').textContent = "";
+      document.querySelector('#titlovi-config-page').addEventListener('pageshow', function () {
+        Dashboard.showLoadingMsg();
+        ApiClient.getPluginConfiguration(TitloviConfig.pluginUniqueId).then(function (config) {
+          document.querySelector('#titlovi-username').value = config.LoginInfo.username;
+          document.querySelector('#titlovi-password').value = config.LoginInfo.password;
 
-              Dashboard.alert({message: 'Token successfully invalidated.', title: 'Success'});
-            } else {
-              Dashboard.alert({message: `Failed to invalidate token (HTTP ${response.status}).`, title: 'Error'});
-            }
-          }).catch(error => {
-            Dashboard.alert({message: `Error calling API: ${error}`, title: 'Error'});
-          });
-          e.preventDefault();
+          if (config.TokenInfo) {
+            document.querySelector('#titlovi-token').value = config.TokenInfo.Token;
+            document.querySelector('#titlovi-token-date').textContent = config.TokenInfo.ExpirationDate;
+          }
+          Dashboard.hideLoadingMsg();
         });
-      document.querySelector('#titlovi-config-page')
-        .addEventListener('submit', function (e) {
-          Dashboard.showLoadingMsg();
-          ApiClient.getPluginConfiguration(TitloviConfig.pluginUniqueId).then(function (config) {
-            config.LoginInfo.username = document.querySelector('#titlovi-username').value;
-            config.LoginInfo.password = document.querySelector('#titlovi-password').value;
-            ApiClient.updatePluginConfiguration(TitloviConfig.pluginUniqueId, config).then(function (result) {
-              Dashboard.processPluginConfigurationUpdateResult(result);
-            });
+      });
+
+      document.querySelector('#titlovi-token-invalidate').addEventListener('click', function () {
+        fetch(ApiClient.getUrl('Titlovi/InvalidateToken'), {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Emby-Token': ApiClient.accessToken()
+          }
+        }).then(response => {
+          if (response.ok) {
+            document.querySelector('#titlovi-token').value = "";
+            document.querySelector('#titlovi-token-date').textContent = "";
+
+            Dashboard.alert({message: "Token successfully invalidated.", title: "Success"});
+          } else {
+            Dashboard.alert({message: "Failed to invalidate token!", title: "Error"});
+          }
+        }).catch(error => Dashboard.alert({message: "Failed to call the internal API.", title: "Error"}));
+        e.preventDefault();
+      });
+
+      document.querySelector('#titlovi-token-authenticate').addEventListener('click', function (e) {
+        ApiClient.getPluginConfiguration(TitloviConfig.pluginUniqueId).then(function (config) {
+          config.LoginInfo.username = document.querySelector('#titlovi-username').value;
+          config.LoginInfo.password = document.querySelector('#titlovi-password').value;
+          ApiClient.updatePluginConfiguration(TitloviConfig.pluginUniqueId, config).then(function (result) {
+            Dashboard.processPluginConfigurationUpdateResult(result);
+          }).then(function (result) {
+            fetch(ApiClient.getUrl('Titlovi/Authenticate'), {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'X-Emby-Token': ApiClient.accessToken()
+              }
+            }).then(response => {
+              if (response.ok) {
+                Dashboard.alert({message: "You have been successfully authenciated!", title: "Success"});
+              } else {
+                Dashboard.alert({message: "Authentication has failed, please check your credentials and try again!", title: "Error"});
+              }
+            }).catch(error => Dashboard.alert({message: "Failed to call the internal API.", title: "Error"}));
           });
-          e.preventDefault();
-          return false;
         });
+        e.preventDefault();
+      });
     </script>
   </div>
 </body>

@@ -8,6 +8,14 @@
     "owner": "maatko",
     "versions": [
       {
+        "changelog": "+ Proper authentication in config page",
+        "checksum": "2c61bb217f9352355b4740fed215fb4d",
+        "sourceUrl": "https://github.com/Titlovi/titlovi-jellyfin/releases/download/v1.1.1/titlovi-com_1.1.1.0.zip",
+        "targetAbi": "10.10.7.0",
+        "timestamp": "2025-10-08T13:14:48Z",
+        "version": "1.1.1.0"
+      },
+      {
         "changelog": "+ Support for subtitle episode collections",
         "checksum": "df07942811b8da45c2acc5f0b337b268",
         "sourceUrl": "https://github.com/Titlovi/titlovi-jellyfin/releases/download/v1.1.0/titlovi-com_1.1.0.0.zip",

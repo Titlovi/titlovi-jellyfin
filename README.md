@@ -12,6 +12,12 @@ ensuring your movies and TV shows are always synced with high-quality, community
 
 the plugin can be installed through a custom plugin repository.
 
+### video
+
+video tutorial on how to install the plugin into newer versions of Jellyfin (10.11.*)
+
+https://github.com/user-attachments/assets/45e323d5-75c8-43b9-a525-fd705ace4235
+
 ### repository
 
 1. open your admin dashboard and navigate to `Plugins`

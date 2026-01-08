@@ -43,7 +43,7 @@ dotnet publish "$PLUGIN_NAME"
 
 # Copy only DLL files
 echo "Copying DLL files to $TARGET_DIR..."
-sudo find "$SOURCE_DIR/bin/Release/net8.0/publish/" -name "*.dll" -exec cp {} "$TARGET_DIR/" \;
+sudo find "$SOURCE_DIR/bin/Release/net9.0/publish/" -name "*.dll" -exec cp {} "$TARGET_DIR/" \;
 
 # Check if any DLLs were found and copied
 DLL_COUNT=$(find "$SOURCE_DIR" -name "*.dll" | wc -l)

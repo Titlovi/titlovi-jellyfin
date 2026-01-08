@@ -1,8 +1,9 @@
 #!/bin/bash
 
 # Configuration
-PLUGIN_NAME="Titlovi.Jellyfin"
-SOURCE_DIR="$PLUGIN_NAME"
+SOLUTION_NAME="Titlovi.sln"
+PLUGIN_NAME="Titlovi.Plugin"
+SOURCE_DIR="src/$PLUGIN_NAME"
 JELLYFIN_PLUGINS_DIR="/var/lib/jellyfin/plugins"
 TARGET_DIR="$JELLYFIN_PLUGINS_DIR/JellyfinTitlovi"
 
@@ -39,7 +40,7 @@ fi
 
 # Build the plugin
 echo "Building $PLUGIN_NAME project..."
-dotnet publish "$PLUGIN_NAME"
+dotnet publish "$SOLUTION_NAME"
 
 # Copy only DLL files
 echo "Copying DLL files to $TARGET_DIR..."

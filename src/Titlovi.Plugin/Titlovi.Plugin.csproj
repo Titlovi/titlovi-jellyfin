@@ -17,4 +17,8 @@
       <ExcludeAssets>runtime</ExcludeAssets>
     </PackageReference>
   </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Titlovi.Api\Titlovi.Api.csproj" />
+  </ItemGroup>
 </Project>

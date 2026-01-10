@@ -1,4 +1,4 @@
-namespace Titlovi.Api.Models;
+namespace Titlovi.Api.Models.Requests;
 
 public sealed class LoginRequest
 {

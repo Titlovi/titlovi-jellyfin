@@ -1,7 +1,24 @@
-<div id="TitloviConfigPage" data-role="page" class="page type-interior pluginConfigurationPage" data-controller="__plugin/Titlovi.com-js">
-    <div data-role="content">
-        <div class="content-primary">
-          <h1>Titlovi.com</h1>
+<div id="TitloviConfigPage" data-role="page" class="page type-interior pluginConfigurationPage"
+  data-controller="__plugin/Titlovi.com-js">
+  <div data-role="content">
+    <div class="content-primary">
+      <h1>Titlovi.com</h1>
+      <form id="TitloviConfigForm">
+        <div class="inputContainer">
+          <input type="text" name="username" id="username" label="Username" is="emby-input" />
         </div>
+        <div class="inputContainer">
+          <input type="password" name="password" id="password" label="Password" is="emby-input" />
+        </div>
+        <div class="inputContainer">
+          <button type="submit" name="submit" is="emby-button" class="raised button-submit block">
+            Login
+          </button>
+        </div>
+        <div class="inputContainer">
+          <input type="password" name="token" id="token" label="Token" is="emby-input" disabled />
+        </div>
+      </form>
     </div>
+  </div>
 </div>

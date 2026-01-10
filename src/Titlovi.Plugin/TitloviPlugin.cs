@@ -31,7 +31,12 @@ public sealed class TitloviPlugin : BasePlugin<TitloviConfiguration>, IHasWebPag
     new()
     {
       Name = Name,
-      EmbeddedResourcePath = string.Format(CultureInfo.InvariantCulture, "{0}.Configuration.TitloviConfiguration.html", GetType().Namespace)
+      EmbeddedResourcePath = $"{GetType().Namespace}.Configuration.TitloviConfiguration.html"
+    },
+    new()
+    {
+      Name = $"{Name}-js",
+      EmbeddedResourcePath = $"{GetType().Namespace}.Configuration.TitloviConfiguration.js"
     }
   ];
 }

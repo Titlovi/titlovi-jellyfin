@@ -1,4 +1,4 @@
-namespace Titlovi.Api;
+﻿namespace Titlovi.Api;
 
 public interface ITitloviClient
 {

@@ -11,6 +11,10 @@ export default function(view, _) {
       page.querySelector('#username').value = config.Username || '';
       page.querySelector('#password').value = config.Password || '';
 
+      if (config.Token){
+        page.querySelector('#token').value = config.Token.Token;
+      }
+
       Dashboard.hideLoadingMsg();
     }).catch(function() {
       Dashboard.hideLoadingMsg();
@@ -38,9 +42,8 @@ export default function(view, _) {
           password
         })
       }).then(response => {
-        console.log(response)
         if (response.ok) {
-          return response.text()
+          return response.json()
         } else {
           Dashboard.alert({ message: "Authentication has failed, please check your credentials and try again!", title: "Error" });
           Dashboard.hideLoadingMsg();
@@ -49,8 +52,7 @@ export default function(view, _) {
       }).then(data => {
         config.Username = username
         config.Password = password
-
-        console.log(data);
+        config.Token = data
 
         ApiClient.updatePluginConfiguration(TitloviUniqueId, config).then(function(result) {
           Dashboard.processPluginConfigurationUpdateResult(result);

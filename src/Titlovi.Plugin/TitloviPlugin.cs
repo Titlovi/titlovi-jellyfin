@@ -27,15 +27,15 @@ public sealed class TitloviPlugin : BasePlugin<TitloviConfiguration>, IHasWebPag
 
     // <inheritdoc />
     public IEnumerable<PluginPageInfo> GetPages() => [
-      new()
-    {
-      Name = Name,
-      EmbeddedResourcePath = $"{GetType().Namespace}.Configuration.TitloviConfiguration.html"
-    },
-    new()
-    {
-      Name = $"{Name}-js",
-      EmbeddedResourcePath = $"{GetType().Namespace}.Configuration.TitloviConfiguration.js"
-    }
+        new()
+        {
+          Name = Name,
+          EmbeddedResourcePath = $"{GetType().Namespace}.Configuration.TitloviConfiguration.html"
+        },
+        new()
+        {
+          Name = $"{Name}-js",
+          EmbeddedResourcePath = $"{GetType().Namespace}.Configuration.TitloviConfiguration.js"
+        }
     ];
 }

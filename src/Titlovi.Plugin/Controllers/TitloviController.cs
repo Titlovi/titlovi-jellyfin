@@ -36,6 +36,20 @@ public sealed class TitloviController(IKodiClient kodiClient) : ControllerBase
         }
     }
 
+    [HttpPost("InvalidateToken")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<ActionResult> InvalidateToken()
+    {
+        var instance = TitloviPlugin.Instance;
+        if (instance is null)
+            return StatusCode(StatusCodes.Status500InternalServerError);
+
+        instance.Configuration.Token = null;
+        instance.SaveConfiguration();
+        return Ok();
+    }
+
     [HttpPost("ValidateLogin")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]

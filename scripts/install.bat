@@ -32,7 +32,7 @@ if not exist "%TARGET_DIR%" (
 
 REM Build the plugin
 echo Building %PLUGIN_NAME% project...
-dotnet publish "%SOLUTION_NAME%"
+dotnet publish -c Debug "%SOLUTION_NAME%"
 if errorlevel 1 (
     echo [ERROR] Build failed!
     exit /b 1
@@ -42,7 +42,7 @@ echo.
 REM Copy only DLL files
 echo Copying DLL files to %TARGET_DIR%...
 set DLL_COUNT=0
-for /r "%SOURCE_DIR%\bin\Release\net9.0\publish\" %%f in (*.dll) do (
+for /r "%SOURCE_DIR%\bin\Debug\net9.0\publish\" %%f in (*.dll) do (
     copy /Y "%%f" "%TARGET_DIR%\" >nul
     set /a DLL_COUNT+=1
 )

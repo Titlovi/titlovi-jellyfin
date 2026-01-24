@@ -2,14 +2,32 @@
 
 namespace Titlovi.Api.Models;
 
+/// <summary>
+/// Represents an authentication token returned by the Titlovi service.
+/// </summary>
 public sealed class Token
 {
+    /// <summary>
+    /// Gets the token identifier string.
+    /// </summary>
     [JsonPropertyName("Token")]
-    public required string Id { get; set; }
+    public required string Id { get; init; }
 
-    public required int UserId { get; set; }
+    /// <summary>
+    /// Gets the user's unique identifier.
+    /// </summary>
+    [JsonPropertyName("UserId")]
+    public required int UserId { get; init; }
 
-    public required string UserName { get; set; }
+    /// <summary>
+    /// Gets the username associated with this token.
+    /// </summary>
+    [JsonPropertyName("UserName")]
+    public required string UserName { get; init; }
 
-    public required DateTime ExpirationDate { get; set; }
+    /// <summary>
+    /// Gets the date and time when this token expires.
+    /// </summary>
+    [JsonPropertyName("ExpirationDate")]
+    public required DateTime ExpirationDate { get; init; }
 }

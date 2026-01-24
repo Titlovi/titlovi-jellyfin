@@ -9,12 +9,20 @@ using Titlovi.Api.Models.Requests;
 
 namespace Titlovi.Plugin.Controllers;
 
+/// <summary>
+/// API controller for managing Titlovi subtitle service authentication and tokens.
+/// </summary>
 [ApiController]
 [Route("[controller]")]
 [Produces(MediaTypeNames.Application.Json)]
 [Authorize(Policy = Policies.SubtitleManagement)]
 public sealed class TitloviController(IKodiClient kodiClient) : ControllerBase
 {
+    /// <summary>
+    /// Retrieves an authentication token using username and password credentials.
+    /// </summary>
+    /// <param name="request">Login credentials containing username and password.</param>
+    /// <returns>Authentication token on success, error details on failure.</returns>
     [HttpPost("GetToken")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -36,6 +44,10 @@ public sealed class TitloviController(IKodiClient kodiClient) : ControllerBase
         }
     }
 
+    /// <summary>
+    /// Clears the stored authentication token from plugin configuration.
+    /// </summary>
+    /// <returns>Success status or internal server error if plugin instance unavailable.</returns>
     [HttpPost("InvalidateToken")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -50,6 +62,12 @@ public sealed class TitloviController(IKodiClient kodiClient) : ControllerBase
         return Ok();
     }
 
+    /// <summary>
+    /// Validates user credentials against the Titlovi service.
+    /// </summary>
+    /// <param name="username">Username to validate.</param>
+    /// <param name="password">Password to validate.</param>
+    /// <returns>Boolean indicating whether credentials are valid.</returns>
     [HttpPost("ValidateLogin")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -58,13 +76,11 @@ public sealed class TitloviController(IKodiClient kodiClient) : ControllerBase
     {
         try
         {
-            var response = await kodiClient.ValidateLogin(new()
+            return Ok((await kodiClient.ValidateLogin(new()
             {
                 Username = username,
                 Password = password
-            }).ConfigureAwait(false);
-
-            return Ok(response.StatusCode == HttpStatusCode.OK);
+            }).ConfigureAwait(false)).StatusCode == HttpStatusCode.OK);
         }
         catch (Refit.ApiException ex)
         {

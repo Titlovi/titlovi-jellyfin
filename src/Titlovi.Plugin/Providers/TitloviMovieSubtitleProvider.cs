@@ -1,18 +1,38 @@
-﻿using MediaBrowser.Controller.Providers;
+﻿using MediaBrowser.Controller.Authentication;
+using MediaBrowser.Controller.Providers;
 using MediaBrowser.Controller.Subtitles;
-using MediaBrowser.Model.MediaInfo;
 using MediaBrowser.Model.Providers;
-using MediaBrowser.Model.Search;
 using Titlovi.Api;
 using Titlovi.Api.Models.Enums;
+using Titlovi.Plugin.Extensions;
 
 namespace Titlovi.Plugin.Providers;
 
-public sealed class TitloviMovieSubtitleProvider(IKodiClient kodiClient) : TitloviSubtitleProvider("Titlovi.com - Movies", VideoContentType.Movie)
+public sealed class TitloviMovieSubtitleProvider(IKodiClient kodiClient, ITitloviClient titloviClient) : TitloviSubtitleProvider("Titlovi.com - Movies", VideoContentType.Movie)
 {
-    public override Task<SubtitleResponse> GetSubtitles(string id, CancellationToken cancellationToken)
+    public override async Task<SubtitleResponse> GetSubtitles(string id, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        var metadata = id.Split(':');
+        if (metadata.Length < 2 || !int.TryParse(metadata[0], out var mediaId))
+            return new();
+
+        var response = await titloviClient.DownloadSubtitle(new()
+        {
+            MediaId = mediaId,
+            Type = SubtitleType.Movie
+        }).ConfigureAwait(false);
+
+        if (!response.IsSuccessStatusCode)
+            return new();
+
+        return new()
+        {
+            Format = "srt",
+            IsForced = false,
+            IsHearingImpaired = false,
+            Language = metadata[1],
+            Stream = response.Content,
+        };
     }
 
     public override async Task<IEnumerable<RemoteSubtitleInfo>> Search(SubtitleSearchRequest request, CancellationToken cancellationToken)
@@ -21,31 +41,31 @@ public sealed class TitloviMovieSubtitleProvider(IKodiClient kodiClient) : Titlo
         if (pluginInstance is null || request.DisabledSubtitleFetchers.Contains(Name))
             return [];
 
-        var token = pluginInstance.Configuration.Token;
-        if (token is null || token.ExpirationDate <= DateTime.Now)
-            return []; // TODO: alert the user that their authentication token has expired.
+        var configuration = pluginInstance.Configuration;
+        var token = configuration.Token;
 
-        var imdb = request.ProviderIds?.GetValueOrDefault("Imdb");
-        return (await kodiClient.Search(new()
+        if (token is null || token.ExpirationDate <= DateTime.Now)
+        {
+            try
+            {
+                token = await kodiClient.GetToken(configuration.Username, configuration.Password).ConfigureAwait(false);
+            }
+            catch (Exception)
+            {
+                throw new AuthenticationException("You titlovi.com credentials are not invalid");
+            }
+        }
+
+        var imdbId = request.ProviderIds?.GetValueOrDefault("Imdb");
+        return [.. (await kodiClient.Search(new()
         {
             Token = token.Id,
             UserId = token.UserId,
             Type = SubtitleType.Movie,
-            ImdbId = imdb,
-            Query = imdb == null ? request.Name : null,
-            IgnoreLangAndEpisode = true,
-        }).ConfigureAwait(false)).Results.Select(result => new RemoteSubtitleInfo()
-        {
-            Id = $"{result.Id}-{result.Type}-{result.Language}-{request.IndexNumber}",
-            Name = result.Title,
-            CommunityRating = result.Rating,
-            DownloadCount = result.DownloadCount,
-            ProviderName = Name,
-            AiTranslated = false,
-            DateCreated = result.Date,
-            Format = "srt",
-            Author = string.Empty,
-            Comment = result.Release
-        }).ToList();
+            ImdbId = imdbId,
+            Query = imdbId ?? request.Name,
+            Lang = request.Language.ToProviderLanguage(),
+            IgnoreLangAndEpisode = false,
+        }).ConfigureAwait(false)).Results.Select(result => result.ToRemoteSubtitleInfo(Name))];
     }
 }

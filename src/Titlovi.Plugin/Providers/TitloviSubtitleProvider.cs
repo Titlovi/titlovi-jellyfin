@@ -5,6 +5,8 @@ using MediaBrowser.Model.Dlna;
 using MediaBrowser.Model.Dto;
 using MediaBrowser.Model.MediaInfo;
 using MediaBrowser.Model.Providers;
+using System.Collections.ObjectModel;
+using System.IO.Compression;
 
 namespace Titlovi.Plugin.Providers;
 
@@ -17,6 +19,31 @@ public abstract class TitloviSubtitleProvider(string name, params VideoContentTy
     public abstract Task<SubtitleResponse> GetSubtitles(string id, CancellationToken cancellationToken);
 
     public abstract Task<IEnumerable<RemoteSubtitleInfo>> Search(SubtitleSearchRequest request, CancellationToken cancellationToken);
+
+    public static Collection<(string Path, byte[] Buffer)> ExtractSubtitles(byte[] buffer)
+    {
+        try
+        {
+            using (var memoryStream = new MemoryStream(buffer))
+            using (var archive = new ZipArchive(memoryStream, ZipArchiveMode.Read))
+            {
+                return new Collection<(string, byte[])>(archive.Entries
+                    .Where(entry => entry.Name.EndsWith(".srt", StringComparison.OrdinalIgnoreCase))
+                    .Select(entry =>
+                    {
+                        using var entryStream = entry.Open();
+                        using var extractedStream = new MemoryStream();
+                        entryStream.CopyTo(extractedStream);
+                        return (entry.Name, extractedStream.ToArray());
+                    })
+                    .ToList());
+            }
+        }
+        catch (Exception)
+        {
+            return new Collection<(string, byte[])> { (string.Empty, buffer) };
+        }
+    }
 
     /// <summary>
     /// Retrieves detailed media information including stream properties for the specified media file.

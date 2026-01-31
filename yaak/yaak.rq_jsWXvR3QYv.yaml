@@ -1,0 +1,27 @@
+type: http_request
+model: http_request
+id: rq_jsWXvR3QYv
+createdAt: 2026-01-31T17:41:02.845995500
+updatedAt: 2026-01-31T17:42:26.903303300
+workspaceId: wk_B5bdnCXaqd
+folderId: fl_wj9CMaoy5P
+authentication: {}
+authenticationType: null
+body:
+  text: |-
+    {
+      "Username": ${[ USERNAME ]},
+      "Password": ${[ PASSWORD ]}
+    }
+bodyType: application/json
+description: ''
+headers:
+- enabled: true
+  name: Content-Type
+  value: application/json
+  id: c2eBxPSe7Q
+method: POST
+name: validatelogin
+sortPriority: -1769881157013.0
+url: ${[ KODI ]}/validatelogin
+urlParameters: []

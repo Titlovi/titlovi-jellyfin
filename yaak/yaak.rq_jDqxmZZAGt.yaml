@@ -1,0 +1,30 @@
+type: http_request
+model: http_request
+id: rq_jDqxmZZAGt
+createdAt: 2026-01-31T17:39:17.015039200
+updatedAt: 2026-01-31T17:42:33.112078500
+workspaceId: wk_B5bdnCXaqd
+folderId: fl_wj9CMaoy5P
+authentication: {}
+authenticationType: null
+body: {}
+bodyType: null
+description: ''
+headers: []
+method: POST
+name: gettoken
+sortPriority: -1769881157013.0
+url: ${[ KODI ]}/gettoken
+urlParameters:
+- enabled: true
+  name: username
+  value: ${[ USERNAME ]}
+  id: YVdziAvyNs
+- enabled: true
+  name: password
+  value: ${[ PASSWORD ]}
+  id: NrPQ6dfprq
+- enabled: true
+  name: ''
+  value: ''
+  id: wtP3SwyIUw

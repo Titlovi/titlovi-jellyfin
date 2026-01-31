@@ -1,0 +1,58 @@
+type: http_request
+model: http_request
+id: rq_WXo79zhkKz
+createdAt: 2026-01-31T17:43:11.487889400
+updatedAt: 2026-01-31T17:48:04.184089400
+workspaceId: wk_B5bdnCXaqd
+folderId: fl_wj9CMaoy5P
+authentication: {}
+authenticationType: null
+body: {}
+bodyType: null
+description: ''
+headers: []
+method: GET
+name: search
+sortPriority: -1769881157013.0
+url: ${[ KODI ]}/search
+urlParameters:
+- enabled: false
+  name: query
+  value: ''
+  id: U3ufeT4V44
+- enabled: false
+  name: type
+  value: ''
+  id: MdGCZi7idK
+- enabled: false
+  name: season
+  value: ''
+  id: QiKMdF5bTe
+- enabled: true
+  name: imdbId
+  value: ''
+  id: xN7bCDAZy8
+- enabled: false
+  name: pg
+  value: ''
+  id: wT7R9rRs6V
+- enabled: false
+  name: ignoreLangAndEpisode
+  value: ''
+  id: ewjhVXsv9z
+- enabled: false
+  name: lang
+  value: ''
+  id: c48UF3dhNG
+- enabled: true
+  name: token
+  value: ''
+  id: XRQqMQ8EQY
+- enabled: true
+  name: userid
+  value: ''
+  id: tPV8Ga6Hy7
+- enabled: true
+  name: ''
+  value: ''
+  id: CI5Wrhzqj3

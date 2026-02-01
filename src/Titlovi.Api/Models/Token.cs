@@ -30,4 +30,9 @@ public sealed class Token
     /// </summary>
     [JsonPropertyName("ExpirationDate")]
     public required DateTime ExpirationDate { get; init; }
+
+    /// <summary>
+    /// Gets a flag that tells if the current token has expired.
+    /// </summary>
+    public bool IsExpired => DateTime.Now >= ExpirationDate;
 }

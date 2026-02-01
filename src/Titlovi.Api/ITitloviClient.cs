@@ -6,5 +6,5 @@ namespace Titlovi.Api;
 public interface ITitloviClient
 {
     [Get("/download")]
-    public Task<ApiResponse<Stream>> DownloadSubtitle([Query] SubtitleDownloadRequest request);
+    public Task<ApiResponse<HttpContent>> DownloadSubtitle([Query] SubtitleDownloadRequest request);
 }

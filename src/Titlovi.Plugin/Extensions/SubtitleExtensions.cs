@@ -1,5 +1,4 @@
-﻿using ICU4N.Util;
-using MediaBrowser.Model.Providers;
+﻿using MediaBrowser.Model.Providers;
 using Titlovi.Api.Models;
 
 namespace Titlovi.Plugin.Extensions;

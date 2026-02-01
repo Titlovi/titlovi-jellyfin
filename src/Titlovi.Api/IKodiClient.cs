@@ -26,6 +26,11 @@ public interface IKodiClient
     [Post("/validatelogin")]
     Task<IApiResponse> ValidateLogin([Body] LoginRequest request);
 
+    /// <summary>
+    /// Searchs for subtitles based on the provided request parameters.
+    /// </summary>
+    /// <param name="request"><seealso cref="SearchSubtitleRequest"/></param>
+    /// <returns></returns>
     [Get("/search")]
     Task<SubtitlePage> Search([Query] SearchSubtitleRequest request);
 }

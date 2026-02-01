@@ -14,11 +14,6 @@ namespace Titlovi.Plugin.Providers;
 public sealed class TitloviMovieSubtitleProvider(IKodiClient kodiClient, ITitloviClient titloviClient) : TitloviSubtitleProvider("Titlovi.com - Movies", VideoContentType.Movie)
 {
     /// <summary>
-    /// Gets an empty <seealso cref="SubtitleResponse"/>.
-    /// </summary>
-    private static readonly SubtitleResponse EmptySubtitle = new();
-
-    /// <summary>
     /// Downloads subtitles for the specified movie ID.
     /// </summary>
     /// <param name="id">Subtitle identifier in format "mediaId:language".</param>

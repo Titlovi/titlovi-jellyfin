@@ -17,6 +17,11 @@ namespace Titlovi.Plugin.Providers;
 public abstract class TitloviSubtitleProvider(string name, params VideoContentType[] contentTypes) : ISubtitleProvider
 {
     /// <summary>
+    /// Gets an empty <seealso cref="SubtitleResponse"/>.
+    /// </summary>
+    protected static readonly SubtitleResponse EmptySubtitle = new();
+
+    /// <summary>
     /// Gets the name of the <seealso cref="ISubtitleProvider"/>.
     /// </summary>
     public string Name => name;

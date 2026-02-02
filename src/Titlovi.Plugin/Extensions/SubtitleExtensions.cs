@@ -1,4 +1,6 @@
 ﻿using MediaBrowser.Model.Providers;
+using System.Text;
+using System.Text.Json;
 using Titlovi.Api.Models;
 
 namespace Titlovi.Plugin.Extensions;
@@ -12,7 +14,7 @@ public static class SubtitleExtensions
         var languageCode = subtitle.Language.FromProviderLanguage();
         return new()
         {
-            Id = $"{subtitle.Id}:{languageCode}",
+            Id = Convert.ToBase64String(Encoding.UTF8.GetBytes(JsonSerializer.Serialize(subtitle.ToMetadata()))),
             AiTranslated = false,
             DateCreated = subtitle.Date,
             DownloadCount = subtitle.DownloadCount,

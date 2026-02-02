@@ -2,7 +2,9 @@
 using MediaBrowser.Controller.Subtitles;
 using MediaBrowser.Model.Providers;
 using System.Collections.Immutable;
+using System.Text.Json;
 using Titlovi.Api;
+using Titlovi.Api.Models;
 using Titlovi.Api.Models.Enums;
 using Titlovi.Plugin.Extensions;
 
@@ -21,11 +23,11 @@ public sealed class TitloviMovieSubtitleProvider(IKodiClient kodiClient, ITitlov
     /// <returns>Subtitle response containing the downloaded subtitle file, or empty response if download fails.</returns>
     public override async Task<SubtitleResponse> GetSubtitles(string id, CancellationToken cancellationToken)
     {
-        var metadata = id.Split(':');
-        if (metadata.Length < 2 || !int.TryParse(metadata[0], out var mediaId))
+        var targetSubitle = JsonSerializer.Deserialize<SubtitleMetadata>(Convert.FromBase64String(id));
+        if (targetSubitle == null)
             return EmptySubtitle;
 
-        var response = await titloviClient.DownloadSubtitle(new(mediaId, SubtitleType.Movie)).ConfigureAwait(false);
+        var response = await titloviClient.DownloadSubtitle(targetSubitle.ToDownloadRequest()).ConfigureAwait(false);
         if (!response.IsSuccessStatusCode)
             return EmptySubtitle;
 
@@ -35,14 +37,7 @@ public sealed class TitloviMovieSubtitleProvider(IKodiClient kodiClient, ITitlov
         if (subtitles.Count == 0)
             return EmptySubtitle;
 
-        return new()
-        {
-            Format = "srt",
-            IsForced = false,
-            IsHearingImpaired = false,
-            Language = metadata[1],
-            Stream = subtitles.First().Buffer,
-        };
+        return subtitles.First().ToResponse(targetSubitle.Language.FromProviderLanguage());
     }
 
     /// <summary>

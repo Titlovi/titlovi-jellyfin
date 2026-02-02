@@ -2,7 +2,7 @@ type: http_request
 model: http_request
 id: rq_WXo79zhkKz
 createdAt: 2026-01-31T17:43:11.487889400
-updatedAt: 2026-01-31T17:48:04.184089400
+updatedAt: 2026-02-02T21:24:15.916556600
 workspaceId: wk_B5bdnCXaqd
 folderId: fl_wj9CMaoy5P
 authentication: {}
@@ -16,7 +16,7 @@ name: search
 sortPriority: -1769881157013.0
 url: ${[ KODI ]}/search
 urlParameters:
-- enabled: false
+- enabled: true
   name: query
   value: ''
   id: U3ufeT4V44
@@ -28,7 +28,7 @@ urlParameters:
   name: season
   value: ''
   id: QiKMdF5bTe
-- enabled: true
+- enabled: false
   name: imdbId
   value: ''
   id: xN7bCDAZy8
@@ -38,7 +38,7 @@ urlParameters:
   id: wT7R9rRs6V
 - enabled: false
   name: ignoreLangAndEpisode
-  value: ''
+  value: 'false'
   id: ewjhVXsv9z
 - enabled: false
   name: lang
@@ -52,7 +52,11 @@ urlParameters:
   name: userid
   value: ''
   id: tPV8Ga6Hy7
+- enabled: false
+  name: episode
+  value: '0'
+  id: 6yi2tGczdn
 - enabled: true
   name: ''
   value: ''
-  id: CI5Wrhzqj3
+  id: y6XJvz0TYe

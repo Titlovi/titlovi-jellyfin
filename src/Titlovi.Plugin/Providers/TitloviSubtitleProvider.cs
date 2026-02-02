@@ -8,6 +8,7 @@ using MediaBrowser.Model.Providers;
 using System.IO.Compression;
 using Titlovi.Api;
 using Titlovi.Api.Models;
+using Titlovi.Api.Models.Requests;
 
 namespace Titlovi.Plugin.Providers;
 
@@ -29,7 +30,7 @@ public abstract class TitloviSubtitleProvider(string name, params VideoContentTy
     /// <summary>
     /// Gets the types of video content this <seealso cref="ISubtitleProvider"/> is used for.
     /// </summary>
-    public IEnumerable<VideoContentType> SupportedMediaTypes => contentTypes;
+    public IEnumerable<VideoContentType> SupportedMediaTypes => [.. contentTypes];
 
     /// <summary>
     /// Downloads subtitles for the specified ID.

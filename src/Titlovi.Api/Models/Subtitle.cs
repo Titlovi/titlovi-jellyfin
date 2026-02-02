@@ -1,5 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 using Titlovi.Api.Models.Enums;
+using Titlovi.Api.Models.Requests;
 
 namespace Titlovi.Api.Models;
 
@@ -98,4 +99,6 @@ public sealed class Subtitle
     /// <value>Contains details like quality, source, and release group (e.g., "BluRay.1080p.x264").</value>
     [JsonPropertyName("Release")]
     public string Release { get; set; } = string.Empty;
+
+    public SubtitleMetadata ToMetadata() => new(Id, Type, Language, Season, Episode);
 }

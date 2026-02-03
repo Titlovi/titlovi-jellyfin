@@ -1,9 +1,8 @@
----
 name: "Titlovi.com"
 guid: "6e25df50-638e-4109-a50b-03c14fc93fdd"
-version: "1.1.2.0"
-targetAbi: "10.10.7.0"
-framework: "net8.0"
+version: "1.2.1.0"
+targetAbi: "10.11.5.0"
+framework: "net9.0"
 overview: "get access to subtitles from titlovi.com directly in jellyfin."
 description: >
   This plugin allows Jellyfin users to seamlessly access and download subtitles from Titlovi.com directly within the media server,
@@ -12,7 +11,14 @@ description: >
 category: "Metadata"
 owner: "maatko"
 artifacts:
-- "Titlovi.Jellyfin.dll"
+- "Refit.HttpClientFactory.dll"
+- "Titlovi.Plugin.dll"
+- "Titlovi.Api.dll"
 - "FuzzySharp.dll"
+- "Refit.dll"
 changelog: >
-  + x-app header
+  + jellyfin 10.11.* and upwards
+  + fixed an issue where authentication was not processed correctly
+  + fixed an issue where episode metadata was not matched correctly on an episode
+  + proper searching on all search pages for subtitles
+  + fixed an issue where some movies were not showing up do to imdb ids

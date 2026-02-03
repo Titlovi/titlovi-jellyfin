@@ -1,0 +1,30 @@
+type: http_request
+model: http_request
+id: rq_PGWtSYLy4v
+createdAt: 2026-01-31T17:45:53.780557900
+updatedAt: 2026-01-31T17:47:22.816987100
+workspaceId: wk_B5bdnCXaqd
+folderId: fl_4zyUjyNEjE
+authentication: {}
+authenticationType: null
+body: {}
+bodyType: null
+description: ''
+headers: []
+method: GET
+name: download
+sortPriority: -1769881157013.0
+url: ${[ TITLOVI ]}/download
+urlParameters:
+- enabled: true
+  name: mediaid
+  value: '402924'
+  id: uNijwh7RUR
+- enabled: true
+  name: type
+  value: '2'
+  id: VIvrGpIcbz
+- enabled: true
+  name: ''
+  value: ''
+  id: sQUscVHcqb

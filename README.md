@@ -10,34 +10,7 @@ ensuring your movies and TV shows are always synced with high-quality, community
 
 ## installation
 
-the plugin can be installed through a custom plugin repository.
-
-### video
-
-video tutorial on how to install the plugin into newer versions of Jellyfin (10.11.*)
-
 https://github.com/user-attachments/assets/45e323d5-75c8-43b9-a525-fd705ace4235
-
-### repository
-
-1. open your admin dashboard and navigate to `Plugins`
-2. open the `Catalog` page
-3. at the top of the page click the gear symbol for settings
-4. next click the `+` button to add a new repository
-5. fill out the required information with following
-   - **Repository Name** = `Titlovi`
-   - **Repository Url** = `https://titlovi.github.io/titlovi-jellyfin/repository.json`
-6. finally click the save button
-
-### plugin
-
-1. add the repository with the steps above
-2. open your admin dashboard and navigate to `Plugins`
-3. open the `Catalog` page
-4. from there find the `Titlovi.com` plugin and click it
-5. click the `Install` button
-
-**keep on mind, most plugin installs will require a restart of jellyfin!**
 
 ## configuration
 

@@ -1,0 +1,24 @@
+﻿root = true
+
+[*]
+indent_style = space
+indent_size = 4
+insert_final_newline = false
+charset = utf-8-bom
+trim_trailing_whitespace = true
+
+[*.{cs,vb}]
+indent_size = 4
+tab_width = 4
+
+[*.{csproj,vbproj,vcxproj,vcxproj.filters,proj,projitems,shproj}]
+indent_size = 2
+
+[*.{json,yml,yaml}]
+indent_size = 2
+
+[*.{js,html}]
+indent_size = 2
+
+[*.md]
+trim_trailing_whitespace = false

@@ -1,0 +1,51 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <CodeAnalysisRuleSet>../jellyfin.ruleset</CodeAnalysisRuleSet>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <AnalysisMode>AllEnabledByDefault</AnalysisMode>
+    <RootNamespace>Titlovi.Plugin</RootNamespace>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Configuration\TitloviConfiguration.html" />
+    <None Remove="Configuration\TitloviConfiguration.js" />
+    <EmbeddedResource Include="Configuration\TitloviConfiguration.html" />
+    <EmbeddedResource Include="Configuration\TitloviConfiguration.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\.editorconfig" Link=".editorconfig" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FuzzySharp" Version="2.0.2" />
+    <PackageReference Include="Jellyfin.Controller" Version="10.11.5">
+      <ExcludeAssets>runtime</ExcludeAssets>
+    </PackageReference>
+    <PackageReference Include="Jellyfin.Model" Version="10.11.5">
+      <ExcludeAssets>runtime</ExcludeAssets>
+    </PackageReference>
+  </ItemGroup>
+    
+  <ItemGroup>
+    <ProjectReference Include="..\Titlovi.Api\Titlovi.Api.csproj" />
+  </ItemGroup>
+  
+  <Target Name="CleanMicrosoftExtensions" AfterTargets="Build">
+    <ItemGroup>
+      <MicrosoftExtensionsDlls Include="$(OutDir)Microsoft.Extensions.*.dll" />
+    </ItemGroup>
+    <Delete Files="@(MicrosoftExtensionsDlls)" ContinueOnError="true" />
+    <Message Text="Removed: @(MicrosoftExtensionsDlls)" Importance="high" />
+  </Target>
+  <Target Name="CleanMicrosoftExtensionsPublish" AfterTargets="Publish">
+    <ItemGroup>
+      <MicrosoftExtensionsDllsPublish Include="$(PublishDir)Microsoft.Extensions.*.dll" />
+    </ItemGroup>
+    <Delete Files="@(MicrosoftExtensionsDllsPublish)" ContinueOnError="true" />
+    <Message Text="Removed from publish: @(MicrosoftExtensionsDllsPublish)" Importance="high" />
+  </Target>
+</Project>

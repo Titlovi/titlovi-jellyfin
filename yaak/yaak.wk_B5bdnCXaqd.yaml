@@ -1,0 +1,15 @@
+type: workspace
+model: workspace
+id: wk_B5bdnCXaqd
+createdAt: 2026-01-31T17:38:10.902728300
+updatedAt: 2026-01-31T17:38:10.902730900
+authentication: {}
+authenticationType: null
+description: ''
+headers: []
+name: titlovi
+encryptionKeyChallenge: null
+settingValidateCertificates: true
+settingFollowRedirects: true
+settingRequestTimeout: 0
+settingDnsOverrides: []

@@ -5,8 +5,6 @@ using System.Text.Json;
 using System.Text.RegularExpressions;
 using Titlovi.Api;
 using Titlovi.Api.Models;
-using Titlovi.Api.Models.Enums;
-using Titlovi.Api.Models.Requests;
 using Titlovi.Plugin.Extensions;
 
 namespace Titlovi.Plugin.Providers;
@@ -61,32 +59,10 @@ public sealed partial class TitloviEpisodeSubtitleProvider(
         var token = await GetTokenAsync(kodiClient).ConfigureAwait(false);
         var subtitles = new List<Subtitle>();
 
-        await CollectSubtitles(subtitles, request, token, 0, 1).ConfigureAwait(false);
-        await CollectSubtitles(subtitles, request, token, request.IndexNumber.GetValueOrDefault(), 1).ConfigureAwait(false);
+        await CollectSubtitles(kodiClient, subtitles, request, token, 1, null, 0).ConfigureAwait(false);
+        await CollectSubtitles(kodiClient, subtitles, request, token, 1, null, request.IndexNumber.GetValueOrDefault()).ConfigureAwait(false);
 
         subtitles.ForEach(subtitle => subtitle.Episode = request.IndexNumber.GetValueOrDefault());
         return [.. subtitles.Select(result => result.ToRemoteSubtitleInfo(Name)).ToList()];
     }
-
-    private async Task CollectSubtitles(List<Subtitle> subtitles, SubtitleSearchRequest request, Token token, int episode, int page)
-    {
-        var response = await kodiClient.Search(CreateSearchRequest(token, request, page, episode)).ConfigureAwait(false);
-        subtitles.AddRange(response.Results);
-
-        if (response.CurrentPage < response.PagesAvailable)
-            await CollectSubtitles(subtitles, request, token, episode, page + 1).ConfigureAwait(false);
-    }
-
-    private static SearchSubtitleRequest CreateSearchRequest(Token token, SubtitleSearchRequest request, int page, int? episode = null) => new()
-    {
-        Token = token.Id,
-        UserId = token.UserId,
-        Type = SubtitleType.Episode,
-        Query = request.SeriesName,
-        Lang = request.Language.ToProviderLanguage(),
-        IgnoreLangAndEpisode = false,
-        Season = request.ParentIndexNumber,
-        Episode = episode,
-        Page = page
-    };
 }

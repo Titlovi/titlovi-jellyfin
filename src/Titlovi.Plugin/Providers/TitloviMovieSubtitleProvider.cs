@@ -53,16 +53,11 @@ public sealed class TitloviMovieSubtitleProvider(IKodiClient kodiClient, ITitlov
 
         var imdbId = request.ProviderIds?.GetValueOrDefault("Imdb");
         var token = await GetTokenAsync(kodiClient).ConfigureAwait(false);
+        var subtitles = new List<Subtitle>();
 
-        return [.. (await kodiClient.Search(new()
-        {
-            Token = token.Id,
-            UserId = token.UserId,
-            Type = SubtitleType.Movie,
-            ImdbId = imdbId,
-            Query = imdbId ?? request.Name,
-            Lang = request.Language.ToProviderLanguage(),
-            IgnoreLangAndEpisode = false,
-        }).ConfigureAwait(false)).Results.Select(result => result.ToRemoteSubtitleInfo(Name))];
+        await CollectSubtitles(kodiClient, subtitles, request, token, 1, imdbId, null).ConfigureAwait(false);
+        await CollectSubtitles(kodiClient, subtitles, request, token, 1, imdbId, null).ConfigureAwait(false);
+
+        return [.. subtitles.Select(result => result.ToRemoteSubtitleInfo(Name))];
     }
 }

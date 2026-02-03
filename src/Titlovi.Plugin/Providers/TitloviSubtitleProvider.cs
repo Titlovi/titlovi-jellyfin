@@ -8,7 +8,9 @@ using MediaBrowser.Model.Providers;
 using System.IO.Compression;
 using Titlovi.Api;
 using Titlovi.Api.Models;
+using Titlovi.Api.Models.Enums;
 using Titlovi.Api.Models.Requests;
+using Titlovi.Plugin.Extensions;
 
 namespace Titlovi.Plugin.Providers;
 
@@ -136,5 +138,57 @@ public abstract class TitloviSubtitleProvider(string name, params VideoContentTy
         };
 
         return await mediaEncoder.GetMediaInfo(requestInfo, cancellationToken).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Recursively collects all subtitles from paginated search results.
+    /// </summary>
+    /// <param name="kodiClient">Kodi client instance for API requests.</param>
+    /// <param name="subtitles">Collection to populate with found subtitles.</param>
+    /// <param name="request">Search criteria for subtitles.</param>
+    /// <param name="token">Authentication token.</param>
+    /// <param name="page">Current page number to retrieve.</param>
+    /// <param name="imdbId">Optional IMDb identifier for the content.</param>
+    /// <param name="index">Optional episode index for series content.</param>
+    protected static async Task CollectSubtitles(IKodiClient kodiClient, IList<Subtitle> subtitles, SubtitleSearchRequest request, Token token, int page, string? imdbId = null, int? index = null)
+    {
+        ArgumentNullException.ThrowIfNull(kodiClient);
+        ArgumentNullException.ThrowIfNull(subtitles);
+
+        var response = await kodiClient.Search(CreateSearchRequest(token, request, page, imdbId, index)).ConfigureAwait(false);
+        foreach (var subtitle in response.Results)
+            subtitles.Add(subtitle);
+
+        if (response.CurrentPage < response.PagesAvailable)
+            await CollectSubtitles(kodiClient, subtitles, request, token, page + 1, imdbId, index).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Creates a search request for the Kodi API from subtitle search criteria.
+    /// </summary>
+    /// <param name="token">Authentication token.</param>
+    /// <param name="request">Search criteria for subtitles.</param>
+    /// <param name="page">Page number to retrieve.</param>
+    /// <param name="imdbId">Optional IMDb identifier for the content.</param>
+    /// <param name="index">Optional episode index for series content.</param>
+    /// <returns>Configured search request for the API.</returns>
+    protected static SearchSubtitleRequest CreateSearchRequest(Token token, SubtitleSearchRequest request, int page, string? imdbId = null, int? index = null)
+    {
+        ArgumentNullException.ThrowIfNull(token);
+        ArgumentNullException.ThrowIfNull(request);
+
+        return new()
+        {
+            Token = token.Id,
+            UserId = token.UserId,
+            Type = index == null ? SubtitleType.Movie : SubtitleType.Episode,
+            Query = imdbId ?? request.SeriesName,
+            Lang = request.Language.ToProviderLanguage(),
+            IgnoreLangAndEpisode = false,
+            Season = request.ParentIndexNumber,
+            Episode = index,
+            Page = page,
+            ImdbId = imdbId,
+        };
     }
 }

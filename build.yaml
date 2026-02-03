@@ -1,5 +1,6 @@
 name: "Titlovi.com"
 guid: "6e25df50-638e-4109-a50b-03c14fc93fdd"
+imageUrl: "https://github.com/Titlovi/titlovi-jellyfin/blob/main/logo.png?raw=true"
 version: "1.2.1.0"
 targetAbi: "10.11.5.0"
 framework: "net9.0"

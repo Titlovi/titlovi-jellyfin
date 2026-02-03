@@ -1,4 +1,5 @@
-﻿using MediaBrowser.Controller.Providers;
+﻿using MediaBrowser.Controller.MediaEncoding;
+using MediaBrowser.Controller.Providers;
 using MediaBrowser.Controller.Subtitles;
 using MediaBrowser.Model.Providers;
 using System.Text.Json;
@@ -9,7 +10,11 @@ using Titlovi.Plugin.Extensions;
 
 namespace Titlovi.Plugin.Providers;
 
+/// <summary>
+/// Episode Subtitle provider for movies from Titlovi.com.
+/// </summary>
 public sealed partial class TitloviEpisodeSubtitleProvider(
+    IMediaEncoder mediaEncoder,
     IKodiClient kodiClient,
     ITitloviClient titloviClient
 ) : TitloviSubtitleProvider("Titlovi.com - Episodes", VideoContentType.Episode)
@@ -17,6 +22,7 @@ public sealed partial class TitloviEpisodeSubtitleProvider(
     [GeneratedRegex(@"[sS](?<season>\d+)\.?[eE](?<episode>\d+)", RegexOptions.Compiled)]
     private static partial Regex EpisodeRegex();
 
+    /// <inheritdoc />
     public override async Task<SubtitleResponse> GetSubtitles(string id, CancellationToken cancellationToken)
     {
         var targetSubitle = JsonSerializer.Deserialize<SubtitleMetadata>(Convert.FromBase64String(id));
@@ -51,6 +57,7 @@ public sealed partial class TitloviEpisodeSubtitleProvider(
         return EmptySubtitle;
     }
 
+    /// <inheritdoc />
     public override async Task<IEnumerable<RemoteSubtitleInfo>> Search(SubtitleSearchRequest request, CancellationToken cancellationToken)
     {
         if (request.DisabledSubtitleFetchers.Contains(Name))
@@ -62,7 +69,15 @@ public sealed partial class TitloviEpisodeSubtitleProvider(
         await CollectSubtitles(kodiClient, subtitles, request, token, 1, null, 0).ConfigureAwait(false);
         await CollectSubtitles(kodiClient, subtitles, request, token, 1, null, request.IndexNumber.GetValueOrDefault()).ConfigureAwait(false);
 
+        var mediaInfo = await GetMediaInfoAsync(mediaEncoder, request.MediaPath, cancellationToken).ConfigureAwait(false);
+        ArgumentNullException.ThrowIfNull(mediaInfo);
+
         subtitles.ForEach(subtitle => subtitle.Episode = request.IndexNumber.GetValueOrDefault());
-        return [.. subtitles.Select(result => result.ToRemoteSubtitleInfo(Name)).ToList()];
+        return [.. subtitles
+            .OrderByDescending(mediaInfo.HashScore)
+            .ThenByDescending(subtitle => subtitle.DownloadCount)
+            .ThenByDescending(subtitle => subtitle.Rating)
+            .Select(result => result.ToRemoteSubtitleInfo(Name))
+        ];
     }
 }

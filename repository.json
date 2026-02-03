@@ -3,10 +3,19 @@
     "category": "Metadata",
     "description": "This plugin allows Jellyfin users to seamlessly access and download subtitles from Titlovi.com directly within the media server, instead of manually searching for subtitle files. You can browse and fetch them through Jellyfin’s interface, ensuring your movies and TV shows are always synced with high-quality, community-provided subtitles in multiple languages.\n",
     "guid": "6e25df50-638e-4109-a50b-03c14fc93fdd",
+    "imageUrl": "https://github.com/Titlovi/titlovi-jellyfin/blob/main/logo.png?raw=true",
     "name": "Titlovi.com",
     "overview": "get access to subtitles from titlovi.com directly in jellyfin.",
     "owner": "maatko",
     "versions": [
+      {
+        "changelog": "  + jellyfin 10.11.* and upwards\r\n  + fixed an issue where authentication was not processed correctly\r\n  + fixed an issue where episode metadata was not matched correctly on an episode\r\n  + proper searching on all search pages for subtitles\r\n  + fixed an issue where some movies were not showing up do to imdb ids",
+        "checksum": "72e467a7daf51d9578336d81514e54ff",
+        "sourceUrl": "https://github.com/Titlovi/titlovi-jellyfin/releases/download/v1.2.1/titlovi-com_1.2.1.0.zip",
+        "targetAbi": "10.11.5.0",
+        "timestamp": "2026-02-03T19:01:59Z",
+        "version": "1.2.1.0"
+      },
       {
         "changelog": "+ x-app header",
         "checksum": "beec89b28e2b8cd52629ea71392b7672",

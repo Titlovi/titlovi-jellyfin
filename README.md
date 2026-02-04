@@ -10,6 +10,12 @@ ensuring your movies and TV shows are always synced with high-quality, community
 
 ## installation
 
+### repository
+* name: Titlovi
+* url: https://titlovi.github.io/titlovi-jellyfin/repository.json
+
+### video
+
 https://github.com/user-attachments/assets/45e323d5-75c8-43b9-a525-fd705ace4235
 
 ## configuration

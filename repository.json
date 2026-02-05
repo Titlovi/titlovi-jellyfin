@@ -9,12 +9,12 @@
     "owner": "maatko",
     "versions": [
       {
-        "changelog": "* More episode formats supported",
-        "checksum": "604f192d1176ba9ec5052393eca7b43f",
-        "sourceUrl": "https://github.com/Titlovi/titlovi-jellyfin/releases/download/v1.2.2/titlovi-com_1.2.1.0.zip",
+        "changelog": "+ support for more version format types",
+        "checksum": "ec5aef5d56b709fd0624454567a81bb1",
+        "sourceUrl": "https://github.com/Titlovi/titlovi-jellyfin/releases/download/v1.2.2/titlovi-com_1.2.2.0.zip",
         "targetAbi": "10.11.5.0",
-        "timestamp": "2026-02-05T17:55:34Z",
-        "version": "1.2.1.0"
+        "timestamp": "2026-02-05T17:58:57Z",
+        "version": "1.2.2.0"
       },
       {
         "changelog": "  + jellyfin 10.11.* and upwards\r\n  + fixed an issue where authentication was not processed correctly\r\n  + fixed an issue where episode metadata was not matched correctly on an episode\r\n  + proper searching on all search pages for subtitles\r\n  + fixed an issue where some movies were not showing up do to imdb ids",

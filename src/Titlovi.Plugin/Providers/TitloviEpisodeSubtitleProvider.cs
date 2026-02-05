@@ -2,6 +2,7 @@
 using MediaBrowser.Controller.Providers;
 using MediaBrowser.Controller.Subtitles;
 using MediaBrowser.Model.Providers;
+using Microsoft.Extensions.Logging;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using Titlovi.Api;
@@ -16,10 +17,11 @@ namespace Titlovi.Plugin.Providers;
 public sealed partial class TitloviEpisodeSubtitleProvider(
     IMediaEncoder mediaEncoder,
     IKodiClient kodiClient,
-    ITitloviClient titloviClient
+    ITitloviClient titloviClient,
+    ILogger<TitloviEpisodeSubtitleProvider> Logger
 ) : TitloviSubtitleProvider("Titlovi.com - Episodes", VideoContentType.Episode)
 {
-    [GeneratedRegex(@"[sS](?<season>\d+)\.?[eE](?<episode>\d+)", RegexOptions.Compiled)]
+    [GeneratedRegex(@"(?:[sS](?<season>\d+)\.?[eE](?<episode>\d+))|(?<season>\d+)x(?<episode>\d+)", RegexOptions.Compiled)]
     private static partial Regex EpisodeRegex();
 
     /// <inheritdoc />
@@ -53,6 +55,9 @@ public sealed partial class TitloviEpisodeSubtitleProvider(
             if (targetSubitle.Season == season && targetSubitle.Episode == episode)
                 return subtitle.ToResponse(targetSubitle.Language.FromProviderLanguage());
         }
+
+        var subtitlePaths = string.Join(',', subtitles.Select(subtitle => subtitle.Path).ToList());
+        Logger.LogWarning("E={Season}, S={Episode}, not found in: {SubtitlePaths}", targetSubitle.Season, targetSubitle.Episode, subtitlePaths);
 
         return EmptySubtitle;
     }

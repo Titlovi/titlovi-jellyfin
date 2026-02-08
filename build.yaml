@@ -18,8 +18,4 @@ artifacts:
 - "FuzzySharp.dll"
 - "Refit.dll"
 changelog: >
-  + jellyfin 10.11.* and upwards
-  + fixed an issue where authentication was not processed correctly
-  + fixed an issue where episode metadata was not matched correctly on an episode
-  + proper searching on all search pages for subtitles
-  + fixed an issue where some movies were not showing up do to imdb ids
+  + support for more version format types

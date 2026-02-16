@@ -12,7 +12,7 @@ ensuring your movies and TV shows are always synced with high-quality, community
 
 **IMPORTANT**
 
-To use the plugin you must enable api access on [Titlovi]([https://duckduckgo.com](https://titlovi.com/clanci/8871/podrzi-titlove-please/?debug=1)). When you first register you
+To use the plugin you must enable api access on [Titlovi](https://titlovi.com/clanci/8871/podrzi-titlove-please/?debug=1). When you first register you
 get 30 days free, after that you must have atleast a **"zmaj supporter"** subscription active.
 
 ## installation

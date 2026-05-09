@@ -37,7 +37,10 @@ public sealed partial class TitloviEpisodeSubtitleProvider(
 
         ArgumentNullException.ThrowIfNull(response.Content);
 
-        var subtitles = ExtractSubtitles(await response.Content.ReadAsMemoryStream().ConfigureAwait(false));
+        var bytes = await response.Content.ReadAsByteArrayAsync(cancellationToken).ConfigureAwait(false);
+        var stream = new MemoryStream(bytes);
+
+        var subtitles = ExtractSubtitles(stream);
         if (subtitles.Count == 0)
             return EmptySubtitle;
 
@@ -71,7 +74,6 @@ public sealed partial class TitloviEpisodeSubtitleProvider(
         var token = await GetTokenAsync(kodiClient).ConfigureAwait(false);
         var subtitles = new List<Subtitle>();
 
-        await CollectSubtitles(kodiClient, subtitles, request, token, 1, null, 0).ConfigureAwait(false);
         await CollectSubtitles(kodiClient, subtitles, request, token, 1, null, request.IndexNumber.GetValueOrDefault()).ConfigureAwait(false);
 
         var mediaInfo = await GetMediaInfoAsync(mediaEncoder, request.MediaPath, cancellationToken).ConfigureAwait(false);

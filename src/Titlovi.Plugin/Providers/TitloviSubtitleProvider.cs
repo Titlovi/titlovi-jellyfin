@@ -85,7 +85,9 @@ public abstract class TitloviSubtitleProvider(string name, params VideoContentTy
 
         try
         {
-            using var archive = new ZipArchive(buffer, ZipArchiveMode.Read);
+            buffer.Position = 0;
+
+            using var archive = new ZipArchive(buffer, ZipArchiveMode.Read, leaveOpen: true);
             ICollection<SubtitleFile> subtitles = [.. archive.Entries
                 .Where(entry => entry.Name.EndsWith(".srt", StringComparison.OrdinalIgnoreCase))
                 .Select(entry =>
@@ -97,7 +99,7 @@ public abstract class TitloviSubtitleProvider(string name, params VideoContentTy
                     extractedStream.Position = 0;
 
                     return new SubtitleFile(entry.Name, extractedStream);
-                })];
+                }).ToList()];
 
             buffer.Close();
             return subtitles;
@@ -177,6 +179,15 @@ public abstract class TitloviSubtitleProvider(string name, params VideoContentTy
         ArgumentNullException.ThrowIfNull(token);
         ArgumentNullException.ThrowIfNull(request);
 
+        IEnumerable<int>? seasons = null;
+        IEnumerable<int>? episodes = null;
+
+        if (index is not null)
+        {
+            seasons = [0, request.ParentIndexNumber.GetValueOrDefault()];
+            episodes = [0, index.GetValueOrDefault()];
+        }
+
         return new()
         {
             Token = token.Id,
@@ -185,8 +196,8 @@ public abstract class TitloviSubtitleProvider(string name, params VideoContentTy
             Query = imdbId ?? request.SeriesName,
             Lang = request.Language.ToProviderLanguage(),
             IgnoreLangAndEpisode = false,
-            Season = request.ParentIndexNumber,
-            Episode = index,
+            Season = seasons,
+            Episode = episodes,
             Page = page,
             ImdbId = imdbId,
         };

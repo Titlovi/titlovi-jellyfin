@@ -5,5 +5,9 @@ namespace Titlovi.Api.Models;
 
 public record SubtitleMetadata(int Id, SubtitleType Type, string Language, int Season, int Episode)
 {
-    public SubtitleDownloadRequest ToDownloadRequest() => new(Id, Type);
+    public SubtitleDownloadRequest ToDownloadRequest() => new()
+    {
+        MediaId = Id,
+        Type = Type
+    };
 }

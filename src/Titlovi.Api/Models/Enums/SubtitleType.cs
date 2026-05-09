@@ -1,4 +1,6 @@
-﻿namespace Titlovi.Api.Models.Enums;
+﻿using System.Text.Json.Serialization;
+
+namespace Titlovi.Api.Models.Enums;
 
 /// <summary>
 /// Specifies the type of media content for subtitle searches.

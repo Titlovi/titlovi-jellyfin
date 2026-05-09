@@ -1,0 +1,15 @@
+<Solution>
+  <Folder Name="/scripts/">
+    <File Path="scripts/install.bat" />
+    <File Path="scripts/install.sh" />
+  </Folder>
+  <Folder Name="/solution/">
+    <File Path="src/jellyfin.ruleset" />
+    <File Path="src/.editorconfig" />
+    <File Path=".gitignore" />
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="src/Titlovi.Api/Titlovi.Api.csproj" />
+    <Project Path="src/Titlovi.Plugin/Titlovi.Plugin.csproj" />
+  </Folder>
+</Solution>

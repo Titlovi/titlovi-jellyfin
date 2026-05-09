@@ -25,6 +25,7 @@ public sealed class SearchSubtitleRequest
     /// </summary>
     /// <value>1 = Movie, 2 = TV Episode.</value>
     [AliasAs("type")]
+    [Query(Format = "d")]
     public SubtitleType? Type { get; set; }
 
     /// <summary>
@@ -32,14 +33,16 @@ public sealed class SearchSubtitleRequest
     /// </summary>
     /// <value>Required when searching for TV episodes (Type = 2).</value>
     [AliasAs("season")]
-    public int? Season { get; set; }
+    [Query(CollectionFormat.Multi)]
+    public IEnumerable<int>? Season { get; set; }
 
     /// <summary>
     /// Gets or sets the episode number for TV episode searches.
     /// </summary>
     /// <value>Required when searching for TV episodes (Type = 2).</value>
     [AliasAs("episode")]
-    public int? Episode { get; set; }
+    [Query(CollectionFormat.Multi)]
+    public IEnumerable<int>? Episode { get; set; }
 
     /// <summary>
     /// Gets or sets the IMDB identifier for the media.

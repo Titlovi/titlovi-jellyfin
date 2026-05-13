@@ -9,7 +9,15 @@
     "owner": "maatko",
     "versions": [
       {
-        "changelog": "+ Fixed zipped subtitle collections no downloading an extracting correctly\r\n+ Optimized the search algorithm when querying for subtitles",
+        "changelog": "+ More detailed logging for catching errors",
+        "checksum": "da492323cc4e00ed360acc6603067201",
+        "sourceUrl": "https://github.com/Titlovi/titlovi-jellyfin/releases/download/v1.2.4/titlovi-com_1.2.4.0.zip",
+        "targetAbi": "10.11.5.0",
+        "timestamp": "2026-05-13T13:31:30Z",
+        "version": "1.2.4.0"
+      },
+      {
+        "changelog": "+ Fixed zipped subtitle collections sometimes not downloading an extracting correctly\r\n+ Optimized the search algorithm when querying for subtitles",
         "checksum": "003c505ea57c7e665e84b4564a5ab772",
         "sourceUrl": "https://github.com/Titlovi/titlovi-jellyfin/releases/download/v1.2.3/titlovi-com_1.2.3.0.zip",
         "targetAbi": "10.11.5.0",

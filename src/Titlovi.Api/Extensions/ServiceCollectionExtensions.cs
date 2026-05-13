@@ -1,18 +1,26 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Refit;
+using System.Text.RegularExpressions;
 
 namespace Titlovi.Api.Extensions;
 
-public class LoggingHandler : DelegatingHandler
+public partial class LoggingHandler(ILogger<LoggingHandler> logger) : DelegatingHandler
 {
+
+    [GeneratedRegex(@"[&?]token=[0-9a-fA-F\-]+")]
+    private static partial Regex TokenExtractRegex();
+
     protected override async Task<HttpResponseMessage> SendAsync(
         HttpRequestMessage request, CancellationToken cancellationToken)
     {
-#if DEBUG
-        Console.WriteLine(request.RequestUri);
-#endif
+        ArgumentNullException.ThrowIfNull(request, nameof(request));
+
+        var rawRequest = TokenExtractRegex().Replace(request.RequestUri!.ToString(), "");
+        logger.LogInformation("SearchRequest: {RawRequest}", rawRequest);
         return await base.SendAsync(request, cancellationToken).ConfigureAwait(false);
     }
+
 }
 
 public static class ServiceCollectionExtensions

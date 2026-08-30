@@ -5,6 +5,7 @@ using MediaBrowser.Model.Providers;
 using Microsoft.Extensions.Logging;
 using System.Text.Json;
 using System.Text.RegularExpressions;
+using MediaBrowser.Common.Extensions;
 using Titlovi.Api;
 using Titlovi.Api.Models;
 using Titlovi.Plugin.Extensions;
@@ -18,7 +19,7 @@ public sealed partial class TitloviEpisodeSubtitleProvider(
     IMediaEncoder mediaEncoder,
     IKodiClient kodiClient,
     ITitloviClient titloviClient,
-    ILogger<TitloviEpisodeSubtitleProvider> Logger
+    ILogger<TitloviEpisodeSubtitleProvider> logger
 ) : TitloviSubtitleProvider("Titlovi.com - Episodes", VideoContentType.Episode)
 {
     [GeneratedRegex(@"(?:[sS](?<season>\d+)\.?[eE](?<episode>\d+))|(?<season>\d+)x(?<episode>\d+)", RegexOptions.Compiled)]
@@ -27,13 +28,13 @@ public sealed partial class TitloviEpisodeSubtitleProvider(
     /// <inheritdoc />
     public override async Task<SubtitleResponse> GetSubtitles(string id, CancellationToken cancellationToken)
     {
-        var targetSubitle = JsonSerializer.Deserialize<SubtitleMetadata>(Convert.FromBase64String(id));
-        if (targetSubitle == null)
-            return EmptySubtitle;
+        var targetSubtitle = JsonSerializer.Deserialize<SubtitleMetadata>(Convert.FromBase64String(id));
+        if (targetSubtitle == null)
+            throw new ResourceNotFoundException("Failed to deserialize internal subtitle download request");
 
-        var response = await titloviClient.DownloadSubtitle(targetSubitle.ToDownloadRequest()).ConfigureAwait(false);
+        var response = await titloviClient.DownloadSubtitle(targetSubtitle.ToDownloadRequest()).ConfigureAwait(false);
         if (!response.IsSuccessStatusCode)
-            return EmptySubtitle;
+            throw new ResourceNotFoundException($"Failed to download subtitle [type={targetSubtitle.Type}, mediaId={targetSubtitle.Id}, code={response.StatusCode}]");
 
         ArgumentNullException.ThrowIfNull(response.Content);
 
@@ -42,7 +43,7 @@ public sealed partial class TitloviEpisodeSubtitleProvider(
 
         var subtitles = ExtractSubtitles(stream);
         if (subtitles.Count == 0)
-            return EmptySubtitle;
+            throw new ResourceNotFoundException($"Compressed Subtitle file contained no available subtitles [type={targetSubtitle.Type}, mediaId={targetSubtitle.Id}]");
 
         foreach (var subtitle in subtitles)
         {
@@ -55,14 +56,14 @@ public sealed partial class TitloviEpisodeSubtitleProvider(
             if (!int.TryParse(match.Groups["episode"].Value, out var episode))
                 continue;
 
-            if (targetSubitle.Season == season && targetSubitle.Episode == episode)
-                return subtitle.ToResponse(targetSubitle.Language.FromProviderLanguage());
+            if (targetSubtitle.Season == season && targetSubtitle.Episode == episode)
+                return subtitle.ToResponse(targetSubtitle.Language.FromProviderLanguage());
         }
 
         var subtitlePaths = string.Join(',', subtitles.Select(subtitle => subtitle.Path).ToList());
-        Logger.LogWarning("E={Season}, S={Episode}, not found in: {SubtitlePaths}", targetSubitle.Season, targetSubitle.Episode, subtitlePaths);
+        logger.LogWarning("E={Season}, S={Episode}, not found in: {SubtitlePaths}", targetSubtitle.Season, targetSubtitle.Episode, subtitlePaths);
 
-        return EmptySubtitle;
+        throw new ResourceNotFoundException($"Failed to locate matching subtitle for target season and episode [type={targetSubtitle.Type}, mediaId={targetSubtitle.Id}, season={targetSubtitle.Season}, episode={targetSubtitle.Episode}]");
     }
 
     /// <inheritdoc />

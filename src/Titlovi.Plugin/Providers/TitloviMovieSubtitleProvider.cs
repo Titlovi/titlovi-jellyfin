@@ -4,6 +4,7 @@ using MediaBrowser.Controller.Subtitles;
 using MediaBrowser.Model.Providers;
 using System.Collections.Immutable;
 using System.Text.Json;
+using MediaBrowser.Common.Extensions;
 using Titlovi.Api;
 using Titlovi.Api.Models;
 using Titlovi.Plugin.Extensions;
@@ -22,13 +23,13 @@ public sealed class TitloviMovieSubtitleProvider(
     /// <inheritdoc />
     public override async Task<SubtitleResponse> GetSubtitles(string id, CancellationToken cancellationToken)
     {
-        var targetSubitle = JsonSerializer.Deserialize<SubtitleMetadata>(Convert.FromBase64String(id));
-        if (targetSubitle == null)
-            return EmptySubtitle;
+        var targetSubtitle = JsonSerializer.Deserialize<SubtitleMetadata>(Convert.FromBase64String(id));
+        if (targetSubtitle == null)
+            throw new ResourceNotFoundException("Failed to deserialize internal subtitle download request");
 
-        var response = await titloviClient.DownloadSubtitle(targetSubitle.ToDownloadRequest()).ConfigureAwait(false);
+        var response = await titloviClient.DownloadSubtitle(targetSubtitle.ToDownloadRequest()).ConfigureAwait(false);
         if (!response.IsSuccessStatusCode)
-            return EmptySubtitle;
+            throw new ResourceNotFoundException($"Failed to download subtitle [type={targetSubtitle.Type}, mediaId={targetSubtitle.Id}, code={response.StatusCode}]");
 
         ArgumentNullException.ThrowIfNull(response.Content);
 
@@ -36,10 +37,7 @@ public sealed class TitloviMovieSubtitleProvider(
         var stream = new MemoryStream(bytes);
 
         var subtitles = ExtractSubtitles(stream);
-        if (subtitles.Count == 0)
-            return EmptySubtitle;
-
-        return subtitles.First().ToResponse(targetSubitle.Language.FromProviderLanguage());
+        return subtitles.Count == 0 ? throw new ResourceNotFoundException($"Compressed Subtitle file contained no valid subtitles [type={targetSubtitle.Type}, mediaId={targetSubtitle.Id}]") : subtitles.First().ToResponse(targetSubtitle.Language.FromProviderLanguage());
     }
 
     /// <inheritdoc />

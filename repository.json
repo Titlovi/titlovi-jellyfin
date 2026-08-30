@@ -9,6 +9,14 @@
     "owner": "maatko",
     "versions": [
       {
+        "changelog": "+ Fix: proper exception is thrown now if subtitle is not found, which in turn fixes jellyfin attemping to close a stream that is null in an empty subtitle response",
+        "checksum": "799f8909c596a3daa58801ef30918f16",
+        "sourceUrl": "https://github.com/Titlovi/titlovi-jellyfin/releases/download/v1.2.5/titlovi-com_1.2.5.0.zip",
+        "targetAbi": "10.11.5.0",
+        "timestamp": "2026-08-30T12:47:51Z",
+        "version": "1.2.5.0"
+      },
+      {
         "changelog": "+ More detailed logging for catching errors",
         "checksum": "da492323cc4e00ed360acc6603067201",
         "sourceUrl": "https://github.com/Titlovi/titlovi-jellyfin/releases/download/v1.2.4/titlovi-com_1.2.4.0.zip",

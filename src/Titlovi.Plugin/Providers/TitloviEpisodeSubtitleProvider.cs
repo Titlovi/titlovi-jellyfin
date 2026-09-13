@@ -105,7 +105,11 @@ public sealed partial class TitloviEpisodeSubtitleProvider(
         }
 
         var subtitlePaths = string.Join(',', subtitles.Select(subtitle => subtitle.Path).ToList());
-        logger.LogWarning("E={Season}, S={Episode}, not found in: {SubtitlePaths}", targetSubtitle.Season, targetSubtitle.Episode, subtitlePaths);
+        logger.LogWarning(
+    "S={Season}, E={Episode}, not found in: {SubtitlePaths}",
+    targetSubtitle.Season,
+    targetSubtitle.Episode,
+    subtitlePaths);
 
         throw new ResourceNotFoundException($"Failed to locate matching subtitle for target season and episode [type={targetSubtitle.Type}, mediaId={targetSubtitle.Id}, season={targetSubtitle.Season}, episode={targetSubtitle.Episode}]");
     }

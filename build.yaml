@@ -1,9 +1,9 @@
 name: "Titlovi.com"
 guid: "6e25df50-638e-4109-a50b-03c14fc93fdd"
 imageUrl: "https://github.com/Titlovi/titlovi-jellyfin/blob/main/logo.png?raw=true"
-version: "1.2.5.0"
-targetAbi: "10.11.5.0"
-framework: "net9.0"
+version: "1.3.0.0"
+targetAbi: "12.0.0.0"
+framework: "net10.0"
 overview: "get access to subtitles from titlovi.com directly in jellyfin."
 description: >
   This plugin allows Jellyfin users to seamlessly access and download subtitles from Titlovi.com directly within the media server,
@@ -18,4 +18,7 @@ artifacts:
 - "FuzzySharp.dll"
 - "Refit.dll"
 changelog: >
-  + support for more version format types
+  + Jellyfin 12 support
+  + Updated plugin to .NET 10
+  + Fixed authorization with Jellyfin 12
+  + Improved episode detection in subtitle ZIP files

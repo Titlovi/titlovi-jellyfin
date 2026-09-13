@@ -22,8 +22,55 @@ public sealed partial class TitloviEpisodeSubtitleProvider(
     ILogger<TitloviEpisodeSubtitleProvider> logger
 ) : TitloviSubtitleProvider("Titlovi.com - Episodes", VideoContentType.Episode)
 {
-    [GeneratedRegex(@"(?:[sS](?<season>\d+)\.?[eE](?<episode>\d+))|(?<season>\d+)x(?<episode>\d+)", RegexOptions.Compiled)]
-    private static partial Regex EpisodeRegex();
+    [GeneratedRegex(@"(?:S|Season)[\-. ]?(?<season>\d{1,2})[\-. ]?(?:E|Ę|Episode)[\-. ]?(?<episode>\d{1,2})|(?<season>\d{1,2})x(?<episode>\d{1,2})|E(?<episode>\d{1,2})|Part[\-. ]?(?<episode>\d{1,2})|^(?<episode>\d{1,2})\D|\D(?<episode>\d{1,2})$", RegexOptions.IgnoreCase)]
+    private static partial Regex EpisodeRegEx();
+
+
+    private static Match? GetBestEpisodeMatch(string input)
+    {
+        MatchCollection matches = EpisodeRegEx().Matches(input);
+
+        return matches
+            .FirstOrDefault(match =>
+                match.Groups["season"].Success &&
+                match.Groups["episode"].Success)
+            ?? matches
+                .OrderByDescending(match => match.Value.Length)
+                .FirstOrDefault();
+    }
+
+    private static bool IsMatchingEpisode(
+        string fileName,
+        int season,
+        int episode)
+    {
+        var match = GetBestEpisodeMatch(
+            Path.GetFileNameWithoutExtension(fileName));
+
+        if (match is null)
+            return false;
+
+        if (!int.TryParse(
+                match.Groups["episode"].Value,
+                out var matchedEpisode)
+            || matchedEpisode != episode)
+        {
+            return false;
+        }
+
+        // Ako filename sadrži i sezonu, mora odgovarati i sezona.
+        if (match.Groups["season"].Success)
+        {
+            return int.TryParse(
+                    match.Groups["season"].Value,
+                    out var matchedSeason)
+                && matchedSeason == season;
+        }
+
+        // E03, Part03, "03 - naziv" i slično nemaju sezonu,
+        // pa uspoređujemo samo epizodu.
+        return true;
+    }
 
     /// <inheritdoc />
     public override async Task<SubtitleResponse> GetSubtitles(string id, CancellationToken cancellationToken)
@@ -47,21 +94,22 @@ public sealed partial class TitloviEpisodeSubtitleProvider(
 
         foreach (var subtitle in subtitles)
         {
-            var match = EpisodeRegex().Match(subtitle.Path);
-            if (!match.Success)
-                continue;
-
-            if (!int.TryParse(match.Groups["season"].Value, out var season))
-                continue;
-            if (!int.TryParse(match.Groups["episode"].Value, out var episode))
-                continue;
-
-            if (targetSubtitle.Season == season && targetSubtitle.Episode == episode)
-                return subtitle.ToResponse(targetSubtitle.Language.FromProviderLanguage());
+            if (IsMatchingEpisode(
+                    subtitle.Path,
+                    targetSubtitle.Season,
+                    targetSubtitle.Episode))
+            {
+                return subtitle.ToResponse(
+                    targetSubtitle.Language.FromProviderLanguage());
+            }
         }
 
         var subtitlePaths = string.Join(',', subtitles.Select(subtitle => subtitle.Path).ToList());
-        logger.LogWarning("E={Season}, S={Episode}, not found in: {SubtitlePaths}", targetSubtitle.Season, targetSubtitle.Episode, subtitlePaths);
+        logger.LogWarning(
+    "S={Season}, E={Episode}, not found in: {SubtitlePaths}",
+    targetSubtitle.Season,
+    targetSubtitle.Episode,
+    subtitlePaths);
 
         throw new ResourceNotFoundException($"Failed to locate matching subtitle for target season and episode [type={targetSubtitle.Type}, mediaId={targetSubtitle.Id}, season={targetSubtitle.Season}, episode={targetSubtitle.Episode}]");
     }

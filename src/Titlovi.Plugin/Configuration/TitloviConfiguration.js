@@ -1,17 +1,11 @@
 ﻿async function sendRequest(endpoint, body = undefined) {
-  const response = await fetch(ApiClient.getUrl(endpoint), {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'X-Emby-Token': ApiClient.accessToken()
-    },
-    body: body
+  return ApiClient.ajax({
+    type: 'POST',
+    url: ApiClient.getUrl(endpoint),
+    data: body,
+    dataType: 'json',
+    contentType: 'application/json'
   });
-
-  if (!response.ok) {
-    throw new Error();
-  }
-  return response;
 }
 
 export default function (view, _) {
@@ -54,7 +48,7 @@ export default function (view, _) {
 
         config.Username = username
         config.Password = password
-        config.Token = await response.json()
+        config.Token = response
 
         view.querySelector('#username').value = config.Username
         view.querySelector('#password').value = config.Password

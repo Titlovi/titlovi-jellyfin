@@ -18,4 +18,6 @@ artifacts:
 - "FuzzySharp.dll"
 - "Refit.dll"
 changelog: >
-  + support for more version format types
+  + Jellyfin 12 support
+  + Updated plugin to .NET 10
+  + Fixed authorization with Jellyfin 12

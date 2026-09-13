@@ -12,13 +12,21 @@ public partial class LoggingHandler(ILogger<LoggingHandler> logger) : Delegating
     private static partial Regex TokenExtractRegex();
 
     protected override async Task<HttpResponseMessage> SendAsync(
-        HttpRequestMessage request, CancellationToken cancellationToken)
+    HttpRequestMessage request,
+    CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(request, nameof(request));
 
-        var rawRequest = TokenExtractRegex().Replace(request.RequestUri!.ToString(), "");
-        logger.LogInformation("SearchRequest: {RawRequest}", rawRequest);
-        return await base.SendAsync(request, cancellationToken).ConfigureAwait(false);
+        if (logger.IsEnabled(LogLevel.Information))
+        {
+            var rawRequest = TokenExtractRegex()
+                .Replace(request.RequestUri!.ToString(), "");
+
+            logger.LogInformation("SearchRequest: {RawRequest}", rawRequest);
+        }
+
+        return await base.SendAsync(request, cancellationToken)
+            .ConfigureAwait(false);
     }
 
 }

@@ -10,7 +10,7 @@
 
 [Upute za instalaciju](INSTALL.md) · [Izvorni kod](https://github.com/Titlovi/titlovi-unified)
 
-> **Status izdanja:** Jellyfin 2.0.0.0 je u pripremi i još nije objavljen.
+> **Objavljeno:** [Titlovi.com 2.0.0.0](https://github.com/Titlovi/titlovi-jellyfin/releases/tag/v2.0.0) dostupan je za **Jellyfin 12 / .NET 10** kroz postojeći katalog dodataka.
 
 ## Instalacija
 
@@ -21,7 +21,7 @@ https://titlovi.github.io/titlovi-jellyfin/repository.json
 ```
 
 1. Dodajte navedeni URL repozitorija.
-2. U katalogu pronađite **Titlovi.com** i odaberite verziju kompatibilnu s Jellyfinom 12 (nakon objave izdanja 2.0).
+2. U katalogu pronađite **Titlovi.com** i odaberite verziju kompatibilnu s Jellyfinom 12 (2.0.0.0 za Jellyfin 12).
 3. Ponovno pokrenite Jellyfin, konfigurirajte račun te pretražite i preuzmite titl.
 
 ### Video upute za instalaciju
@@ -47,9 +47,9 @@ Rezultati zadržavaju stvarni jezik koji vraća Titlovi.com, a različiti Titlov
 
 ## Zahtjevi i kompatibilnost
 
-**Jellyfin 12.x / .NET 10** te Titlovi.com račun s API pristupom. Jellyfin 2.0.0.0 još se priprema i **nije objavljen**. Starija izdanja 1.x ostaju dostupna za podržane starije verzije Jellyfina.
+**Jellyfin 12.x / .NET 10** te Titlovi.com račun s API pristupom. [Jellyfin 2.0.0.0](https://github.com/Titlovi/titlovi-jellyfin/releases/tag/v2.0.0) je objavljen. Izdanja 1.x ostaju dostupna za kompatibilne starije verzije Jellyfina; Unified 2.0 ne podržava Jellyfin 10.x.
 
-**Nemojte instalirati GitHubovu automatsku arhivu „Source code (zip/tar.gz)”.** Upotrijebite katalog ili kompatibilan ZIP paket nakon objave.
+**Nemojte instalirati GitHubovu automatsku arhivu „Source code (zip/tar.gz)”.** Upotrijebite katalog ili [službeni ZIP paket](https://github.com/Titlovi/titlovi-jellyfin/releases/tag/v2.0.0).
 
 ## Izvorni kod, podrška i starije verzije
 

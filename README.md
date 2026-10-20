@@ -10,7 +10,7 @@
 
 [Installation guide](INSTALL.md) · [Source code](https://github.com/Titlovi/titlovi-unified)
 
-> **Release status:** Jellyfin 2.0.0.0 is being prepared, not yet published.
+> **Released:** [Titlovi.com 2.0.0.0](https://github.com/Titlovi/titlovi-jellyfin/releases/tag/v2.0.0) is available for **Jellyfin 12 / .NET 10** through the existing plugin catalogue.
 
 ## Installation
 
@@ -21,7 +21,7 @@ https://titlovi.github.io/titlovi-jellyfin/repository.json
 ```
 
 1. Add the repository URL shown above.
-2. Find **Titlovi.com** in the catalogue and select the version compatible with Jellyfin 12 (after 2.0 is released).
+2. Find **Titlovi.com** in the catalogue and select the version compatible with Jellyfin 12 (2.0.0.0 for Jellyfin 12).
 3. Restart Jellyfin, configure your account, then search for and download a subtitle.
 
 ### Video installation guide
@@ -47,9 +47,9 @@ Search results preserve the language returned by Titlovi.com, and different Titl
 
 ## Requirements and compatibility
 
-**Jellyfin 12.x / .NET 10** and a Titlovi.com account with API access. Jellyfin 2.0.0.0 is being prepared and is **not yet published**. The original 1.x releases remain available for older supported Jellyfin versions.
+**Jellyfin 12.x / .NET 10** and a Titlovi.com account with API access. [Jellyfin 2.0.0.0](https://github.com/Titlovi/titlovi-jellyfin/releases/tag/v2.0.0) is published. Original 1.x releases remain available for compatible older Jellyfin versions; Unified 2.0 is not compatible with Jellyfin 10.x.
 
-**Do not install GitHub’s automatically generated “Source code (zip/tar.gz)” archive.** Install through the catalogue or use the compatible release ZIP when available.
+**Do not install GitHub’s automatically generated “Source code (zip/tar.gz)” archive.** Install through the catalogue or use the [official Jellyfin 2.0 ZIP](https://github.com/Titlovi/titlovi-jellyfin/releases/tag/v2.0.0).
 
 ## Source, support and legacy versions
 

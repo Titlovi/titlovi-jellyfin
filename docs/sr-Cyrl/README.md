@@ -3,6 +3,8 @@
 [English](../../README.md) · [Hrvatski](../hr/README.md) · [Српски](README.md)
 
 [![Jellyfin 12](https://img.shields.io/badge/Jellyfin-12.x-0076bb)](INSTALL.md) [![.NET 10](https://img.shields.io/badge/.NET-10-512BD4)](https://github.com/Titlovi/titlovi-unified/tree/v2.0.0)
+[![Latest release](https://img.shields.io/github/v/release/Titlovi/titlovi-jellyfin?label=release&color=0076bb)](https://github.com/Titlovi/titlovi-jellyfin/releases/latest)
+[![ZIP преузимања (2.0)](https://img.shields.io/github/downloads/Titlovi/titlovi-jellyfin/v2.0.0/titlovi-com_2.0.0.0.zip?label=ZIP%20downloads%20(2.0)&color=4c1)](https://github.com/Titlovi/titlovi-jellyfin/releases)
 
 **Претражујте и преузимајте титлове директно у Jellyfin-у 12.**
 

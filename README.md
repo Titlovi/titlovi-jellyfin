@@ -1,37 +1,56 @@
-# titlovi-jellyfin
+# Titlovi.com for Jellyfin
 
-![Dynamic YAML Badge](https://img.shields.io/badge/dynamic/yaml?url=https%3A%2F%2Fraw.githubusercontent.com%2Ftitlovi%2Ftitlovi-jellyfin%2Frefs%2Fheads%2Fmain%2Fbuild.yaml&query=targetAbi&label=Jellyfin%20ABI)
-![Dynamic YAML Badge](https://img.shields.io/badge/dynamic/yaml?url=https%3A%2F%2Fraw.githubusercontent.com%2Ftitlovi%2Ftitlovi-jellyfin%2Frefs%2Fheads%2Fmain%2Fbuild.yaml&query=framework&label=.NET%20Framework)
-![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/Titlovi/titlovi-jellyfin/total)
+[English](README.md) · [Hrvatski](docs/hr/README.md) · [Српски](docs/sr-Cyrl/README.md)
 
-This plugin allows Jellyfin users to seamlessly access and download subtitles from Titlovi.com directly within the media server,
-instead of manually searching for subtitle files. You can browse and fetch them through Jellyfin’s interface,
-ensuring your movies and TV shows are always synced with high-quality, community-provided subtitles in multiple languages.
+[![Jellyfin 12](https://img.shields.io/badge/Jellyfin-12.x-0076bb)](INSTALL.md) [![.NET 10](https://img.shields.io/badge/.NET-10-512BD4)](https://github.com/Titlovi/titlovi-unified/tree/v2.0.0) [![Latest release](https://img.shields.io/github/v/release/Titlovi/titlovi-jellyfin?label=release&color=0076bb)](https://github.com/Titlovi/titlovi-jellyfin/releases)
 
-## usage
+**Search and download subtitles directly in Jellyfin 12.**
 
-**IMPORTANT**
+[Installation guide](INSTALL.md) · [Source code](https://github.com/Titlovi/titlovi-unified)
 
-To use the plugin you must enable api access on [Titlovi](https://titlovi.com/clanci/8871/podrzi-titlove-please/?debug=1). When you first register you
-get 30 days free, after that you must have atleast a **"zmaj supporter"** subscription active.
+> **Release status:** Jellyfin 2.0.0.0 is being prepared, not yet published.
 
-## installation
+## Installation
 
-### repository
-* name: Titlovi
-* url: https://titlovi.github.io/titlovi-jellyfin/repository.json
+Add this plugin repository under **Dashboard → Plugins → Repositories**:
 
-### video
+```text
+https://titlovi.github.io/titlovi-jellyfin/repository.json
+```
+
+1. Add the repository URL shown above.
+2. Find **Titlovi.com** in the catalogue and select the version compatible with Jellyfin 12 (after 2.0 is released).
+3. Restart Jellyfin, configure your account, then search for and download a subtitle.
+
+[Installation guide](INSTALL.md).
+
+### Video installation guide
 
 https://github.com/user-attachments/assets/45e323d5-75c8-43b9-a525-fd705ace4235
 
-## configuration
+*Original installation walkthrough by Matko. Jellyfin 12 menu labels may differ from those in the recording.*
 
-before the plugin can be used you will have to configure it. you will need to provide
-the following information in the configuration page, for the plugin to function correctly.
-(*your authentication information is only stored on the local jellyfin server via its configuration system.*)
+## Configuration
 
-| Property | Description                                                                               |
-| -------- | ----------------------------------------------------------------------------------------- |
-| Username | The username used to authenticate with titlovi.com                                        |
-| Password | The password used to authenticate with titlovi.com                                        |
+A Titlovi.com account with API access is required. Enter your **username** and **password** in the plugin configuration. Jellyfin stores the credentials in its local server configuration. Optional settings include alternative subtitle languages, UTF-8 conversion and diagnostic logging.
+
+## Features
+
+- Search for movie and television-episode subtitles.
+- Optionally include Serbian, Croatian and Bosnian alternative-language results.
+- Rank release-name matches without excluding other valid results.
+- Handle season/series ZIP files, nested archives and grouped episodes.
+- Support SRT, SUB, TXT, SSA and ASS formats.
+- Optionally convert downloaded subtitles to UTF-8 and enable diagnostic logging.
+
+Search results preserve the language returned by Titlovi.com, and different Titlovi media IDs remain distinct.
+
+## Requirements and compatibility
+
+**Jellyfin 12.x / .NET 10** and a Titlovi.com account with API access. Jellyfin 2.0.0.0 is being prepared and is **not yet published**. The original 1.x releases remain available for older supported Jellyfin versions.
+
+**Do not install GitHub’s automatically generated “Source code (zip/tar.gz)” archive.** Install through the catalogue or use the compatible release ZIP when available.
+
+## Source, support and legacy versions
+
+This repository distributes Jellyfin packages and maintains the existing catalogue. Active source code, development and issue tracking live in [Titlovi/titlovi-unified](https://github.com/Titlovi/titlovi-unified). Matko's original Jellyfin 1.x source is preserved under [historical source tags](https://github.com/Titlovi/titlovi-jellyfin/tree/v1.2.5) and [earlier releases](https://github.com/Titlovi/titlovi-jellyfin/releases). GPL-3.0; see [LICENSE](LICENSE) and [NOTICE](NOTICE.md).

@@ -2,7 +2,7 @@
 
 [English](../../README.md) · [Hrvatski](../hr/README.md) · [Српски](README.md)
 
-[![Jellyfin 12](https://img.shields.io/badge/Jellyfin-12.x-0076bb)](INSTALL.md) [![.NET 10](https://img.shields.io/badge/.NET-10-512BD4)](https://github.com/Titlovi/titlovi-unified/tree/v2.0.0) [![Latest release](https://img.shields.io/github/v/release/Titlovi/titlovi-jellyfin?label=release&color=0076bb)](https://github.com/Titlovi/titlovi-jellyfin/releases)
+[![Jellyfin 12](https://img.shields.io/badge/Jellyfin-12.x-0076bb)](INSTALL.md) [![.NET 10](https://img.shields.io/badge/.NET-10-512BD4)](https://github.com/Titlovi/titlovi-unified/tree/v2.0.0)
 
 **Претражујте и преузимајте титлове директно у Jellyfin-у 12.**
 
@@ -21,8 +21,6 @@ https://titlovi.github.io/titlovi-jellyfin/repository.json
 1. Додајте наведени URL репозиторијума.
 2. У каталогу пронађите **Titlovi.com** и изаберите верзију компатибилну са Jellyfin-ом 12 (након објављивања издања 2.0).
 3. Поново покрените Jellyfin, подесите налог, па претражите и преузмите титл.
-
-[Упутство за инсталацију](INSTALL.md).
 
 ### Видео-упутство за инсталацију
 

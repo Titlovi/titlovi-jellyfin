@@ -2,7 +2,7 @@
 
 [English](README.md) · [Hrvatski](docs/hr/README.md) · [Српски](docs/sr-Cyrl/README.md)
 
-[![Jellyfin 12](https://img.shields.io/badge/Jellyfin-12.x-0076bb)](INSTALL.md) [![.NET 10](https://img.shields.io/badge/.NET-10-512BD4)](https://github.com/Titlovi/titlovi-unified/tree/v2.0.0) [![Latest release](https://img.shields.io/github/v/release/Titlovi/titlovi-jellyfin?label=release&color=0076bb)](https://github.com/Titlovi/titlovi-jellyfin/releases)
+[![Jellyfin 12](https://img.shields.io/badge/Jellyfin-12.x-0076bb)](INSTALL.md) [![.NET 10](https://img.shields.io/badge/.NET-10-512BD4)](https://github.com/Titlovi/titlovi-unified/tree/v2.0.0)
 
 **Search and download subtitles directly in Jellyfin 12.**
 
@@ -21,8 +21,6 @@ https://titlovi.github.io/titlovi-jellyfin/repository.json
 1. Add the repository URL shown above.
 2. Find **Titlovi.com** in the catalogue and select the version compatible with Jellyfin 12 (after 2.0 is released).
 3. Restart Jellyfin, configure your account, then search for and download a subtitle.
-
-[Installation guide](INSTALL.md).
 
 ### Video installation guide
 

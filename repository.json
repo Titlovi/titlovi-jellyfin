@@ -6,7 +6,7 @@
     "imageUrl": "https://github.com/Titlovi/titlovi-jellyfin/blob/main/logo.png?raw=true",
     "name": "Titlovi.com",
     "overview": "get access to subtitles from titlovi.com directly in jellyfin.",
-    "owner": "Titlovi.com",
+    "owner": "mihvel",
     "versions": [
       {
         "changelog": "Titlovi.com Unified 2.0 for Jellyfin 12 / .NET 10. Preserves the existing plugin identity and imports original plugin account credentials where needed; improved subtitle searching, release-aware ranking and archive handling.",

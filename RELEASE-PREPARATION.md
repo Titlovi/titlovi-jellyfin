@@ -1,5 +1,8 @@
 # Jellyfin 2.0.0.0 release preparation — internal checklist
 
+> **Historical preparation record.** Titlovi.com 2.0.0.0 for Jellyfin 12 was published on 2026-10-20 and added to the public catalogue. The catalogue-based upgrade from the original plugin was successfully tested on Jellyfin 12. Earlier references to a draft PR, pending publication, or untested catalogue upgrades are retained only as the pre-release record. For current instructions see [README](README.md) and [INSTALL](INSTALL.md).
+
+
 **NOT FOR PUBLICATION**. Review-only. Do not merge PR #7, create a public release, or update `gh-pages` without approval.
 
 ## Verified

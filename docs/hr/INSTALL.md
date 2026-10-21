@@ -7,7 +7,7 @@
 ## Zahtjevi
 
 - Jellyfin 12.x / .NET 10.
-- Titlovi.com račun s API pristupom.
+- Titlovi.com korisnički račun.
 - Kompatibilan Jellyfin paket, ne Emby DLL ni GitHubova automatska arhiva izvornog koda.
 
 ## Instalacija iz kataloga

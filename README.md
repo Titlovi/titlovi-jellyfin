@@ -32,7 +32,7 @@ https://github.com/user-attachments/assets/45e323d5-75c8-43b9-a525-fd705ace4235
 
 ## Configuration
 
-A Titlovi.com account with API access is required. Enter your **username** and **password** in the plugin configuration. Jellyfin stores the credentials in its local server configuration. Optional settings include alternative subtitle languages, UTF-8 conversion and diagnostic logging.
+A Titlovi.com account is required. Enter your **username** and **password** in the plugin configuration. Jellyfin stores the credentials in its local server configuration. Optional settings include alternative subtitle languages, UTF-8 conversion and diagnostic logging.
 
 ## Features
 

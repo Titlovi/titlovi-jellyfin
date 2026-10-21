@@ -32,7 +32,7 @@ https://github.com/user-attachments/assets/45e323d5-75c8-43b9-a525-fd705ace4235
 
 ## Конфигурација
 
-Потребан је Titlovi.com налог са API приступом. У подешавањима додатка унесите **корисничко име** и **лозинку**. Jellyfin их чува у локалној конфигурацији сервера. Постоје и опције алтернативних језика, претварања у UTF-8 и дијагностичког логовања.
+Потребан је Titlovi.com налог. У подешавањима додатка унесите **корисничко име** и **лозинку**. Jellyfin их чува у локалној конфигурацији сервера. Постоје и опције алтернативних језика, претварања у UTF-8 и дијагностичког логовања.
 
 ## Могућности
 
@@ -47,7 +47,7 @@ https://github.com/user-attachments/assets/45e323d5-75c8-43b9-a525-fd705ace4235
 
 ## Захтеви и компатибилност
 
-**Jellyfin 12.x / .NET 10** и Titlovi.com налог са API приступом. [Jellyfin 2.0.0.0](https://github.com/Titlovi/titlovi-jellyfin/releases/tag/v2.0.0) је објављен. Издања 1.x остају доступна за компатибилне старије верзије Jellyfin-а; Unified 2.0 не подржава Jellyfin 10.x.
+**Jellyfin 12.x / .NET 10** и Titlovi.com налог. [Jellyfin 2.0.0.0](https://github.com/Titlovi/titlovi-jellyfin/releases/tag/v2.0.0) је објављен. Издања 1.x остају доступна за компатибилне старије верзије Jellyfin-а; Unified 2.0 не подржава Jellyfin 10.x.
 
 **Не користите GitHub-ову аутоматску архиву „Source code (zip/tar.gz)” за инсталацију.** Користите каталог или [званични ZIP пакет](https://github.com/Titlovi/titlovi-jellyfin/releases/tag/v2.0.0).
 

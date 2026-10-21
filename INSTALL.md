@@ -7,7 +7,7 @@
 ## Requirements
 
 - Jellyfin 12.x / .NET 10.
-- A Titlovi.com account with API access.
+- A Titlovi.com account.
 - The compatible Jellyfin package; not the Emby DLL or GitHub's auto-generated source archive.
 
 ## Install from the catalogue
